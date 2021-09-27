@@ -1,5 +1,6 @@
 #pragma once
 #include "afxcmn.h"
+#include "afxwin.h"
 
 
 // CDlg_Teaching_Histogram 대화 상자입니다.
@@ -26,16 +27,25 @@ private:
 	unique_ptr<CDlgItem> m_pDlgItem;
 	unique_ptr<COpenCV> m_pOpenCV;
 public:
+
 	UINT m_iEdit_Bin_Num;
-	CSliderCtrl m_Slider_Histogram;
-	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	UINT m_iEdit_Value_Bin_Number;
-
-	void UpdateTestImg();
-
 	UINT m_iEdit_Value_Min;
 	UINT m_iEdit_Value_Max;
+
+	CButton m_Chk_Equalize;
+	CButton m_Chk_Stretch;
+
+	CSliderCtrl m_Slider_Histogram;
+public:
 	virtual BOOL OnInitDialog();
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnBnClickedChkEqualize();
+	afx_msg void OnBnClickedChkStretch();
 	afx_msg void OnEnChangeEditValueBinNumber();
 	afx_msg LRESULT OnReceiveImg(WPARAM wParam, LPARAM lParam);
+
+	void UpdateTestImg();
+	int GetEqualizeUse();
+	int GetStretchUse();
 };

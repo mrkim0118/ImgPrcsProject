@@ -34,6 +34,8 @@ void CDlg_Teaching_Histogram::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_VALUE_BIN_NUMBER, m_iEdit_Value_Bin_Number);
 	DDX_Text(pDX, IDC_EDIT_HISTOGRAM_VALUE_MIN, m_iEdit_Value_Min);
 	DDX_Text(pDX, IDC_EDIT_HISTOGRAM_VALUE_MAX, m_iEdit_Value_Max);
+	DDX_Control(pDX, IDC_CHK_EQUALIZE, m_Chk_Equalize);
+	DDX_Control(pDX, IDC_CHK_STRETCH, m_Chk_Stretch);
 }
 
 
@@ -41,6 +43,8 @@ BEGIN_MESSAGE_MAP(CDlg_Teaching_Histogram, CDialogEx)
 	ON_WM_HSCROLL()
 	ON_MESSAGE(WM_HISTOGRAM, OnReceiveImg)
 	ON_EN_CHANGE(IDC_EDIT_VALUE_BIN_NUMBER, &CDlg_Teaching_Histogram::OnEnChangeEditValueBinNumber)
+	ON_BN_CLICKED(IDC_CHK_EQUALIZE, &CDlg_Teaching_Histogram::OnBnClickedChkEqualize)
+	ON_BN_CLICKED(IDC_CHK_STRETCH, &CDlg_Teaching_Histogram::OnBnClickedChkStretch)
 END_MESSAGE_MAP()
 
 
@@ -122,4 +126,27 @@ LRESULT CDlg_Teaching_Histogram::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
 
 	return 0;
+}
+
+void CDlg_Teaching_Histogram::OnBnClickedChkEqualize()
+{
+	if (m_Chk_Stretch.GetCheck() == TRUE)
+		m_Chk_Equalize.SetCheck(FALSE);
+}
+
+
+void CDlg_Teaching_Histogram::OnBnClickedChkStretch()
+{
+	if (m_Chk_Equalize.GetCheck() == TRUE)
+		m_Chk_Stretch.SetCheck(FALSE);
+}
+
+int CDlg_Teaching_Histogram::GetEqualizeUse()
+{
+	return m_Chk_Equalize.GetCheck();
+}
+
+int CDlg_Teaching_Histogram::GetStretchUse()
+{
+	return m_Chk_Stretch.GetCheck();
 }

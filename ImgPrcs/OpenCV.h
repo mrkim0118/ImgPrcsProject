@@ -118,6 +118,8 @@ public:
 	bool SaveImg(String strImgPath, InputArray Arrayimg, vector<int> Param = {0});
 	bool Mask(InputArray SrcImg, Mat& DstImg, InputArray MaskImg);
 	bool Histogram(InputArray SrcImg, Mat& DstImg, HistogramParams &tHistogramParams);
+	bool Histogram_Strecth(InputArray SrcImg, Mat& DstImg);
+	bool Histogram_Equalize(InputArray SrcImg, Mat& DstImg);
 	bool ThresHold_Adaptive(InputArray SrcImg , Mat& DstImg, AdaptiveThresHoldParams &tAdaptiveThresHoldParams);
 	bool ThresHold(InputArray SrcImg, Mat& DstImg, ThresHoldParams &ThresHoldParams);
 	bool Morphology(InputArray SrcImg , Mat& DstImg, MorphologyParams &tMorPhologyParams, ElementParams &tElementParams);

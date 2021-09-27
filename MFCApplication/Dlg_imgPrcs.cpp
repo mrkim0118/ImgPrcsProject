@@ -328,8 +328,15 @@ void CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart()
 	}
 	case CImgPrcs::_MODE_HISTOGRAM_:
 	{
-		COpenCV::HistogramParams tHistogramParams;
-		m_pOpenCV->Histogram(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tHistogramParams);
+		if (m_pDlgHistogram->GetEqualizeUse() == TRUE)
+			m_pOpenCV->Histogram_Equalize(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img);
+		else if(m_pDlgHistogram->GetStretchUse() == TRUE)
+			m_pOpenCV->Histogram_Strecth(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img);
+		else
+		{
+			COpenCV::HistogramParams tHistogramParams;
+			m_pOpenCV->Histogram(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tHistogramParams);
+		}
 		break;
 	}
 	case CImgPrcs::_MODE_TEMPLATE_MATCH_:
@@ -351,9 +358,8 @@ void CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart()
 		m_pOpenCV->Brightness(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tBrightnessParams);
 		break;
 	}
-
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Dst);
 	}
+	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Dst);
 }
 
 void CDlg_ImgPrcs::OnTcnSelchangeTeachingTab(NMHDR *pNMHDR, LRESULT *pResult)

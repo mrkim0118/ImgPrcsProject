@@ -146,6 +146,32 @@ bool COpenCV::Histogram(InputArray SrcImg , Mat& DstImg , HistogramParams &tHist
 	return 0;
 }
 
+bool COpenCV::Histogram_Strecth(InputArray SrcImg, Mat & DstImg)
+{
+	Mat mSrc = SrcImg.getMat();
+	if (CheckImg(mSrc) == TRUE)
+	{
+		double dMin, dMax;
+		minMaxLoc(mSrc, &dMin, &dMax);
+
+		DstImg = (mSrc - dMin) * 255 / (dMax - dMin);
+
+	}
+	return true;
+}
+
+bool COpenCV::Histogram_Equalize(InputArray SrcImg, Mat & DstImg)
+{
+	Mat mSrc = SrcImg.getMat();
+	if (CheckImg(mSrc) == TRUE)
+	{
+		cvtColor(mSrc, mSrc, COLOR_RGB2GRAY);
+		equalizeHist(mSrc, DstImg);
+	}
+
+	return true;
+}
+
 void COpenCV::GetHistogramImg( Mat & SrcImg , Mat &Dst , Scalar Color , HistogramParams &tHistogramParams)
 {
 	//CV_Assert(Img.type() == CV_32FC1);
@@ -276,7 +302,7 @@ bool COpenCV::Contrast(InputArray SrcImg, Mat & DstImg, float fValue)
 	Mat mSrc = SrcImg.getMat();
 	if (CheckImg(mSrc) == true)
 	{
-		DstImg = mSrc + (mSrc - 128) * fValue;
+		DstImg = mSrc + ((mSrc - 128) * fValue);
 	}
 	return true;
 }

@@ -14,7 +14,7 @@ IMPLEMENT_DYNAMIC(CDlg_Teaching_Brightness, CDialogEx)
 CDlg_Teaching_Brightness::CDlg_Teaching_Brightness(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_DLG_BRIGHTNESS, pParent)
 	, m_iEdit_Value_Brightness(0)
-	, m_fEdit_Value_Contrast(1)
+	, m_fEdit_Value_Contrast(0)
 	, m_iEdit_Brightness(0)
 	, m_fEdit_Contrast(0)
 {
@@ -105,7 +105,7 @@ BOOL CDlg_Teaching_Brightness::OnInitDialog()
 	m_pDlgItem->InitViewData(m_pDlgItem->m_pWnd);
 
 	m_Slider_Brightness.SetRange(0, 512);
-	m_Slider_Brightness.SetPos(m_iEdit_Value_Brightness);
+	m_Slider_Brightness.SetPos(m_iEdit_Value_Brightness+256);
 	m_Slider_Brightness.SetLineSize(10);
 	m_Slider_Brightness.SetPageSize(10);
 

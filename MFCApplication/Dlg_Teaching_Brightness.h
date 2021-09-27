@@ -36,6 +36,8 @@ public:
 	CSliderCtrl m_Slider_Contrast;
 	int m_iEdit_Value_Brightness;
 	float m_fEdit_Value_Contrast;
+
+public:
 	void UpdateTestImg(CScrollBar* pScrollBar);
 	virtual BOOL OnInitDialog();
 
@@ -43,10 +45,9 @@ public:
 	afx_msg void OnEnChangeEditBrightnessVal();
 	afx_msg void OnEnChangeEditContrastVal();
 	afx_msg LRESULT OnReceiveImg(WPARAM wParam, LPARAM lParam);
-
+	afx_msg void OnEnChangeEditBrightness();
+	afx_msg void OnEnChangeEditContrast();
 
 	int GetBrightness();
 	float GetContrast();
-	afx_msg void OnEnChangeEditBrightness();
-	afx_msg void OnEnChangeEditContrast();
 };
