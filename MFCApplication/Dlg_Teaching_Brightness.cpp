@@ -42,6 +42,8 @@ BEGIN_MESSAGE_MAP(CDlg_Teaching_Brightness, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT_BRIGHTNESS_VAL, &CDlg_Teaching_Brightness::OnEnChangeEditBrightnessVal)
 	ON_EN_CHANGE(IDC_EDIT_CONTRAST_VAL, &CDlg_Teaching_Brightness::OnEnChangeEditContrastVal)
 	ON_MESSAGE(WM_BRIGHTNESS, OnReceiveImg)
+	ON_WM_PAINT()
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -186,3 +188,20 @@ float CDlg_Teaching_Brightness::GetContrast()
 }
 
 
+
+
+void CDlg_Teaching_Brightness::OnPaint()
+{
+	CPaintDC dc(this); 
+
+	DrawImage(m_ViewData_Dst);
+}
+
+
+void CDlg_Teaching_Brightness::OnDestroy()
+{
+	CDialogEx::OnDestroy();
+
+	ReleaseViewData();
+
+}

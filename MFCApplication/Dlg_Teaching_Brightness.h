@@ -28,13 +28,11 @@ private:
 
 	int m_iEdit_Brightness;
 	float m_fEdit_Contrast;
-
-public:
+	int m_iEdit_Value_Brightness;
+	float m_fEdit_Value_Contrast;
 
 	CSliderCtrl m_Slider_Brightness;
 	CSliderCtrl m_Slider_Contrast;
-	int m_iEdit_Value_Brightness;
-	float m_fEdit_Value_Contrast;
 
 public:
 	void UpdateTestImg(CScrollBar* pScrollBar);
@@ -48,4 +46,6 @@ public:
 
 	int GetBrightness();
 	float GetContrast();
+	afx_msg void OnPaint();
+	afx_msg void OnDestroy();
 };

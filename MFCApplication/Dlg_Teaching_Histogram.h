@@ -25,7 +25,6 @@ protected:
 
 private:
 	unique_ptr<COpenCV> m_pOpenCV;
-public:
 
 	UINT m_iEdit_Bin_Num;
 	UINT m_iEdit_Value_Bin_Number;
@@ -36,6 +35,7 @@ public:
 	CButton m_Chk_Stretch;
 
 	CSliderCtrl m_Slider_Histogram;
+
 public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
@@ -47,4 +47,6 @@ public:
 	void UpdateTestImg();
 	int GetEqualizeUse();
 	int GetStretchUse();
+	afx_msg void OnPaint();
+	afx_msg void OnDestroy();
 };

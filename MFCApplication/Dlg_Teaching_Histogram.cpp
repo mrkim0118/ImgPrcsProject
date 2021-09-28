@@ -44,6 +44,8 @@ BEGIN_MESSAGE_MAP(CDlg_Teaching_Histogram, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT_VALUE_BIN_NUMBER, &CDlg_Teaching_Histogram::OnEnChangeEditValueBinNumber)
 	ON_BN_CLICKED(IDC_CHK_EQUALIZE, &CDlg_Teaching_Histogram::OnBnClickedChkEqualize)
 	ON_BN_CLICKED(IDC_CHK_STRETCH, &CDlg_Teaching_Histogram::OnBnClickedChkStretch)
+	ON_WM_PAINT()
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -142,10 +144,29 @@ void CDlg_Teaching_Histogram::OnBnClickedChkStretch()
 
 int CDlg_Teaching_Histogram::GetEqualizeUse()
 {
+	UpdateData(TRUE);
 	return m_Chk_Equalize.GetCheck();
+	UpdateData(FALSE);
 }
 
 int CDlg_Teaching_Histogram::GetStretchUse()
 {
+	UpdateData(TRUE);
 	return m_Chk_Stretch.GetCheck();
+	UpdateData(FALSE);
+}
+
+
+void CDlg_Teaching_Histogram::OnPaint()
+{
+	CPaintDC dc(this); 
+	DrawImage(m_ViewData_Dst);
+}
+
+
+void CDlg_Teaching_Histogram::OnDestroy()
+{
+	__super::OnDestroy();
+
+	ReleaseViewData();
 }

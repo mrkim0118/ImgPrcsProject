@@ -253,27 +253,37 @@ LRESULT CDlg_Teaching_Morphology::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 
 int CDlg_Teaching_Morphology::GetMorphAnchorX()
 {
+	UpdateData(TRUE);
 	return m_iEdit_Morph_AnchorX;
+	UpdateData(FALSE);
 }
 
 int CDlg_Teaching_Morphology::GetMorphAnchorY()
 {
+	UpdateData(TRUE);
 	return m_iEdit_Morph_AnchorY;
+	UpdateData(FALSE);
 }
 
 int CDlg_Teaching_Morphology::GetElemetSIze()
 {
+	UpdateData(TRUE);
 	return m_iEdit_Element_Size;
+	UpdateData(FALSE);
 }
 
 int CDlg_Teaching_Morphology::GetElementAnchorX()
 {
+	UpdateData(TRUE);
 	return m_iEdit_Element_AnchorX;
+	UpdateData(FALSE);
 }
 
 int CDlg_Teaching_Morphology::GetElementAnchorY()
 {
+	UpdateData(TRUE);
 	return m_iEdit_Element_AnchorY;
+	UpdateData(FALSE);
 }
 
 
