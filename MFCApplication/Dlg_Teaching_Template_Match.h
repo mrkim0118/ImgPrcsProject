@@ -4,7 +4,7 @@
 
 // CDlg_Teaching_Template_Match 대화 상자입니다.
 
-class CDlg_Teaching_Template_Match : public CDialogEx
+class CDlg_Teaching_Template_Match : public CDialogEx , public CDlgItem
 {
 	DECLARE_DYNAMIC(CDlg_Teaching_Template_Match)
 
@@ -22,7 +22,6 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 private:
-	unique_ptr<CDlgItem> m_pDlgItem;
 	Mat* m_pModelImg;
 	CComboBox m_Cmb_Method;
 

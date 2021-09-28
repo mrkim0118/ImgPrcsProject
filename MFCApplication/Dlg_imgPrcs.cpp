@@ -207,9 +207,9 @@ void CDlg_ImgPrcs::OnBnClickedBtnLoadImg()
 		CT2CA pszString(path);
 		string strPath(pszString);
 
-		*m_pDlgItem->m_ViewData_Src.img =  m_pOpenCV->LoadImg(strPath);
+		*m_ViewData_Src.img =  m_pOpenCV->LoadImg(strPath);
 		
-		m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
+		DrawViewData(m_ViewData_Src);
 	}
 }
 
@@ -231,7 +231,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnSaveImg()
 		CString path = fileDlg.GetPathName();
 		CT2CA pszString(path);
 		string strPath(pszString);
-		m_pOpenCV->SaveImg(strPath, *m_pDlgItem->m_ViewData_Dst.img);
+		m_pOpenCV->SaveImg(strPath, *m_ViewData_Dst.img);
 	}
 }
 
@@ -241,7 +241,6 @@ BOOL CDlg_ImgPrcs::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	m_pOpenCV = make_unique<COpenCV>();
-	m_pDlgItem = make_unique<CDlgItem>();
 	m_pMessageImg = new Mat;
 	InitTeachingTab();
 
@@ -255,9 +254,9 @@ BOOL CDlg_ImgPrcs::OnInitDialog()
 	m_Cmb_Mode.AddString(_T("Mask")); 
 	m_Cmb_Mode.SetCurSel(0);
 
-	m_pDlgItem->m_pWnd = GetDlgItem(IDC_STATIC_SRC_VIEW);
-	m_pDlgItem->m_pWnd_Ext = GetDlgItem(IDC_STATIC_DST_VIEW);
-	m_pDlgItem->InitViewData(m_pDlgItem->m_pWnd, m_pDlgItem->m_pWnd_Ext);
+	m_pWnd = GetDlgItem(IDC_STATIC_SRC_VIEW);
+	m_pWnd_Ext = GetDlgItem(IDC_STATIC_DST_VIEW);
+	InitViewData(m_pWnd, m_pWnd_Ext);
 	m_pDlgThreshold->ShowWindow(SW_SHOW);
 
 	GetDlgItem(IDC_STATIC_SRC_VIEW)->GetWindowRect(&m_DlgRect);
@@ -286,7 +285,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart()
 		tMorphologyParams.Anchor = Point(m_pDlgMorphology->GetMorphAnchorX(), m_pDlgMorphology->GetMorphAnchorY());
 		tMorphologyParams.Kernel = getStructuringElement(tElementParams.eShape, tElementParams.ksize, tElementParams.anchor);
 
-		m_pOpenCV->Morphology(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tMorphologyParams, tElementParams);
+		m_pOpenCV->Morphology(*m_ViewData_Src.img, *m_ViewData_Dst.img, tMorphologyParams, tElementParams);
 		break;
 	}
 	case CImgPrcs::_MODE_THRESHOLD_:
@@ -300,7 +299,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart()
 			tAdaptiveThresHoldParams.iBlockSize = m_pDlgThreshold->GetAdaptive_BlockSize();
 			tAdaptiveThresHoldParams.iC = m_pDlgThreshold->GetAdaptiveC();
 
-			m_pOpenCV->ThresHold_Adaptive(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tAdaptiveThresHoldParams);
+			m_pOpenCV->ThresHold_Adaptive(*m_ViewData_Src.img, *m_ViewData_Dst.img, tAdaptiveThresHoldParams);
 		}
 		else
 		{
@@ -308,7 +307,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart()
 			tThresHoldParams.eType = (ThresholdTypes)m_pDlgThreshold->GetThresholdMethod();
 			tThresHoldParams.iThreshold = m_pDlgThreshold->GetThreshold();
 
-			m_pOpenCV->ThresHold(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tThresHoldParams);
+			m_pOpenCV->ThresHold(*m_ViewData_Src.img, *m_ViewData_Dst.img, tThresHoldParams);
 		}
 		break;
 	}
@@ -317,25 +316,25 @@ void CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart()
 	case CImgPrcs::_MODE_LABELING_:
 	{
 		COpenCV::LabelingParams tLabelingParams;
-		m_pOpenCV->Labeling(*m_pDlgItem->m_ViewData_Dst.img, *m_pDlgItem->m_ViewData_Dst.img, tLabelingParams);
+		m_pOpenCV->Labeling(*m_ViewData_Dst.img, *m_ViewData_Dst.img, tLabelingParams);
 		break;
 	}
 	case CImgPrcs::_MODE_CONTOUR_:
 	{
 		COpenCV::ContourParams tContourParams;
-		m_pOpenCV->Contour(*m_pDlgItem->m_ViewData_Dst.img, *m_pDlgItem->m_ViewData_Dst.img, tContourParams);
+		m_pOpenCV->Contour(*m_ViewData_Dst.img, *m_ViewData_Dst.img, tContourParams);
 		break;
 	}
 	case CImgPrcs::_MODE_HISTOGRAM_:
 	{
 		if (m_pDlgHistogram->GetEqualizeUse() == TRUE)
-			m_pOpenCV->Histogram_Equalize(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img);
+			m_pOpenCV->Histogram_Equalize(*m_ViewData_Src.img, *m_ViewData_Dst.img);
 		else if(m_pDlgHistogram->GetStretchUse() == TRUE)
-			m_pOpenCV->Histogram_Strecth(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img);
+			m_pOpenCV->Histogram_Strecth(*m_ViewData_Src.img, *m_ViewData_Dst.img);
 		else
 		{
 			COpenCV::HistogramParams tHistogramParams;
-			m_pOpenCV->Histogram(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tHistogramParams);
+			m_pOpenCV->Histogram(*m_ViewData_Src.img, *m_ViewData_Dst.img, tHistogramParams);
 		}
 		break;
 	}
@@ -344,7 +343,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart()
 		COpenCV::TemplateMatchParams tTemplateMatchParams;
 		tTemplateMatchParams.Model = m_pDlgTemplateMatch->GetModelImg();
 		tTemplateMatchParams.eTemplateMatchModes = (TemplateMatchModes)m_pDlgTemplateMatch->GetTemplateMatchMethod();
-		m_pOpenCV->TemplateMatching(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tTemplateMatchParams, tTemplateMatchParams.Normalize);
+		m_pOpenCV->TemplateMatching(*m_ViewData_Src.img, *m_ViewData_Dst.img, tTemplateMatchParams, tTemplateMatchParams.Normalize);
 
 		*m_pMessageImg = tTemplateMatchParams.Normalize.clone();
 		::SendMessage(m_pDlgTemplateMatch->GetSafeHwnd(), WM_TEMPLATE_MATCH_NORM, NULL, (LPARAM)m_pMessageImg);
@@ -355,11 +354,11 @@ void CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart()
 		COpenCV::BrightnessParams tBrightnessParams;
 		tBrightnessParams.iBrightness = m_pDlgBrightness->GetBrightness();
 		tBrightnessParams.fContrast = m_pDlgBrightness->GetContrast();
-		m_pOpenCV->Brightness(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tBrightnessParams);
+		m_pOpenCV->Brightness(*m_ViewData_Src.img, *m_ViewData_Dst.img, tBrightnessParams);
 		break;
 	}
 	}
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Dst);
+	DrawViewData(m_ViewData_Dst);
 }
 
 void CDlg_ImgPrcs::OnTcnSelchangeTeachingTab(NMHDR *pNMHDR, LRESULT *pResult)
@@ -404,8 +403,8 @@ void CDlg_ImgPrcs::OnTcnSelchangeTeachingTab(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CDlg_ImgPrcs::OnBnClickedBtnDstToSrc()
 {
-	*m_pDlgItem->m_ViewData_Src.img = m_pDlgItem->m_ViewData_Dst.img->clone();
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
+	*m_ViewData_Src.img = m_ViewData_Dst.img->clone();
+	DrawViewData(m_ViewData_Src);
 
 
 }
@@ -421,7 +420,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg()
 	{
 		if (m_pDlgThreshold != NULL)
 		{
-			*m_pMessageImg = m_pDlgItem->m_ViewData_Src.img->clone();
+			*m_pMessageImg = m_ViewData_Src.img->clone();
 			::SendMessage(m_pDlgThreshold->GetSafeHwnd(), WM_THRESHOLD_TEST, NULL, (LPARAM)m_pMessageImg);
 		}
 		break;
@@ -430,7 +429,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg()
 	{
 		if (m_pDlgMorphology != NULL)
 		{
-			*m_pMessageImg = m_pDlgItem->m_ViewData_Src.img->clone();
+			*m_pMessageImg = m_ViewData_Src.img->clone();
 			::SendMessage(m_pDlgMorphology->GetSafeHwnd(), WM_MORPHOLOGY_TEST, NULL, (LPARAM)m_pMessageImg);
 		}
 		break;
@@ -439,7 +438,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg()
 	{
 		if (m_pDlgTemplateMatch != NULL)
 		{
-			m_pDlgTemplateMatch->CreateModelImg(*m_pDlgItem->m_ViewData_Src.img, *m_pMessageImg, m_ptROI_Start, m_ptROI_End, m_pDlgItem->m_ViewData_Src.rect);
+			m_pDlgTemplateMatch->CreateModelImg(*m_ViewData_Src.img, *m_pMessageImg, m_ptROI_Start, m_ptROI_End, m_ViewData_Src.rect);
 			::SendMessage(m_pDlgTemplateMatch->GetSafeHwnd(), WM_TEMPLATE_MATCH_MODEL, NULL, (LPARAM)m_pMessageImg);
 		}
 		break;
@@ -448,7 +447,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg()
 	{
 		if (m_pDlgHistogram != NULL)
 		{
-			*m_pMessageImg = m_pDlgItem->m_ViewData_Src.img->clone();
+			*m_pMessageImg = m_ViewData_Src.img->clone();
 			::SendMessage(m_pDlgHistogram->GetSafeHwnd(), WM_HISTOGRAM, NULL, (LPARAM)m_pMessageImg);
 		}
 		break;
@@ -457,7 +456,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg()
 	{
 		if (m_pDlgBrightness != NULL)
 		{
-			*m_pMessageImg = m_pDlgItem->m_ViewData_Src.img->clone();
+			*m_pMessageImg = m_ViewData_Src.img->clone();
 			::SendMessage(m_pDlgBrightness->GetSafeHwnd(), WM_BRIGHTNESS, NULL, (LPARAM)m_pMessageImg);
 		}
 		break;
@@ -469,8 +468,8 @@ void CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg()
 void CDlg_ImgPrcs::OnPaint()
 {
 	CPaintDC dc(this); 
-	m_pDlgItem->DrawImage(m_pDlgItem->m_ViewData_Dst);
-	m_pDlgItem->DrawImage(m_pDlgItem->m_ViewData_Src);
+	DrawImage(m_ViewData_Dst);
+	DrawImage(m_ViewData_Src);
 }
 
 
@@ -531,7 +530,7 @@ void CDlg_ImgPrcs::OnLButtonUp(UINT nFlags, CPoint point)
 
 			m_bClicked = false;
 			m_ptROI_End = point;
-			OnDrawROI(m_pDlgItem->m_ViewData_Src);
+			OnDrawROI(m_ViewData_Src);
 		}
 	}
 
@@ -549,7 +548,7 @@ void CDlg_ImgPrcs::OnMouseMove(UINT nFlags, CPoint point)
 		if (m_bClicked == true)
 		{
 			m_ptROI_End = point;
-			OnDrawROI(m_pDlgItem->m_ViewData_Src);
+			OnDrawROI(m_ViewData_Src);
 		}
 	}
 
@@ -562,7 +561,7 @@ void CDlg_ImgPrcs::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	m_pDlgItem->ReleaseViewData();
+	ReleaseViewData();
 	
 	if (m_pMessageImg != NULL)
 	{
@@ -574,9 +573,9 @@ void CDlg_ImgPrcs::OnDestroy()
 
 void CDlg_ImgPrcs::OnBnClickedBtnCvtGray()
 {
-	if (m_pDlgItem->m_ViewData_Src.img != NULL)
+	if (m_ViewData_Src.img != NULL)
 	{
-		cvtColor(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Src.img, COLOR_RGB2GRAY);
-		m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
+		cvtColor(*m_ViewData_Src.img, *m_ViewData_Src.img, COLOR_RGB2GRAY);
+		DrawViewData(m_ViewData_Src);
 	}
 }

@@ -14,7 +14,6 @@ IMPLEMENT_DYNAMIC(CDlg_Teaching_Template_Match, CDialogEx)
 CDlg_Teaching_Template_Match::CDlg_Teaching_Template_Match(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_DLG_TEMPLATE_MATCH, pParent)
 {
-	m_pDlgItem = make_unique<CDlgItem>();
 	m_pModelImg = new Mat();
 }
 
@@ -49,9 +48,9 @@ BOOL CDlg_Teaching_Template_Match::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	m_pDlgItem->m_pWnd = GetDlgItem(IDC_STATIC_TEMPLATE_MODEL);
-	m_pDlgItem->m_pWnd_Ext = GetDlgItem(IDC_STATIC_TEMPLATE_NORMALIZE);
-	m_pDlgItem->InitViewData(m_pDlgItem->m_pWnd , m_pDlgItem->m_pWnd_Ext);
+	m_pWnd = GetDlgItem(IDC_STATIC_TEMPLATE_MODEL);
+	m_pWnd_Ext = GetDlgItem(IDC_STATIC_TEMPLATE_NORMALIZE);
+	InitViewData(m_pWnd , m_pWnd_Ext);
 
 	m_Cmb_Method.AddString(_T("TM_SQDIFF"));
 	m_Cmb_Method.AddString(_T("TM_SQDIFF_NORMED"));
@@ -131,7 +130,7 @@ void CDlg_Teaching_Template_Match::CreateModelImg(Mat SrcImg, Mat& DstImg, CPoin
 	Rect ROI(iStartX, IStartY, iWidth, iHeight);
 	DstImg = SrcImg(ROI);
 
-	//m_pDlgItem->CorrectBitMapWidth()
+	//CorrectBitMapWidth()
 
 	//// Width 값 4의 배수로 맞추기.
 	//int iModelSpanWidth = 0;
@@ -172,25 +171,25 @@ void CDlg_Teaching_Template_Match::CreateModelImg(Mat SrcImg, Mat& DstImg, CPoin
 }
 LRESULT CDlg_Teaching_Template_Match::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
-	m_pDlgItem->m_ViewData_Src.img = (Mat*)lParam;
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
-	*m_pModelImg = m_pDlgItem->m_ViewData_Src.img->clone();
+	m_ViewData_Src.img = (Mat*)lParam;
+	DrawViewData(m_ViewData_Src);
+	*m_pModelImg = m_ViewData_Src.img->clone();
 
 	return 0;
 }
 
 LRESULT CDlg_Teaching_Template_Match::OnReceiveNorm(WPARAM wParam, LPARAM lParam)
 {
-	m_pDlgItem->m_ViewData_Dst.img = (Mat*)lParam;
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Dst);
+	m_ViewData_Dst.img = (Mat*)lParam;
+	DrawViewData(m_ViewData_Dst);
 	return 0;
 }
 
 void CDlg_Teaching_Template_Match::OnPaint()
 {
 	CPaintDC dc(this);
-	m_pDlgItem->DrawImage(m_pDlgItem->m_ViewData_Src);
-	m_pDlgItem->DrawImage(m_pDlgItem->m_ViewData_Dst);
+	DrawImage(m_ViewData_Src);
+	DrawImage(m_ViewData_Dst);
 }
 
 
@@ -198,6 +197,6 @@ void CDlg_Teaching_Template_Match::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	m_pDlgItem->ReleaseViewData();
+	ReleaseViewData();
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }

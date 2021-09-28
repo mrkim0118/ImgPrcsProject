@@ -19,7 +19,6 @@ CDlg_Teaching_Brightness::CDlg_Teaching_Brightness(CWnd* pParent /*=NULL*/)
 	, m_fEdit_Contrast(0)
 {
 	m_pOpenCV = make_unique<COpenCV>();
-	m_pDlgItem = make_unique<CDlgItem>();
 }
 
 CDlg_Teaching_Brightness::~CDlg_Teaching_Brightness()
@@ -43,8 +42,6 @@ BEGIN_MESSAGE_MAP(CDlg_Teaching_Brightness, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT_BRIGHTNESS_VAL, &CDlg_Teaching_Brightness::OnEnChangeEditBrightnessVal)
 	ON_EN_CHANGE(IDC_EDIT_CONTRAST_VAL, &CDlg_Teaching_Brightness::OnEnChangeEditContrastVal)
 	ON_MESSAGE(WM_BRIGHTNESS, OnReceiveImg)
-	ON_EN_CHANGE(IDC_EDIT_BRIGHTNESS, &CDlg_Teaching_Brightness::OnEnChangeEditBrightness)
-	ON_EN_CHANGE(IDC_EDIT_CONTRAST, &CDlg_Teaching_Brightness::OnEnChangeEditContrast)
 END_MESSAGE_MAP()
 
 
@@ -59,7 +56,7 @@ void CDlg_Teaching_Brightness::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 
 		m_iEdit_Value_Brightness = m_Slider_Brightness.GetPos() -255;
 
-		if (m_pDlgItem->m_ViewData_Src.img->empty() != TRUE)
+		if (m_ViewData_Src.img->empty() != TRUE)
 		{
 			UpdateTestImg(pScrollBar);
 		}
@@ -72,7 +69,7 @@ void CDlg_Teaching_Brightness::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 
 		m_fEdit_Value_Contrast = (m_Slider_Contrast.GetPos() - 100) / 10;
 
-		if (m_pDlgItem->m_ViewData_Src.img->empty() != TRUE)
+		if (m_ViewData_Src.img->empty() != TRUE)
 		{
 			UpdateTestImg(pScrollBar);
 		}
@@ -91,8 +88,8 @@ void CDlg_Teaching_Brightness::UpdateTestImg(CScrollBar* pScrollBar)
 	tBrightnessParams.fContrast = m_fEdit_Value_Contrast;
 	tBrightnessParams.iBrightness = m_iEdit_Value_Brightness;
 
-	m_pOpenCV->Brightness(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tBrightnessParams);
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Dst);
+	m_pOpenCV->Brightness(*m_ViewData_Src.img, *m_ViewData_Dst.img, tBrightnessParams);
+	DrawViewData(m_ViewData_Dst);
 
 }
 
@@ -101,8 +98,8 @@ BOOL CDlg_Teaching_Brightness::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	m_pDlgItem->m_pWnd = GetDlgItem((IDC_STATIC_BRIGHTNESS_TEST));
-	m_pDlgItem->InitViewData(m_pDlgItem->m_pWnd);
+	m_pWnd = GetDlgItem((IDC_STATIC_BRIGHTNESS_TEST));
+	InitViewData(m_pWnd);
 
 	m_Slider_Brightness.SetRange(0, 512);
 	m_Slider_Brightness.SetPos(m_iEdit_Value_Brightness+256);
@@ -134,7 +131,7 @@ void CDlg_Teaching_Brightness::OnEnChangeEditBrightnessVal()
 
 	m_Slider_Brightness.SetPos(m_iEdit_Value_Brightness);
 
-	if (m_pDlgItem->m_ViewData_Src.img != NULL)
+	if (m_ViewData_Src.img != NULL)
 	{
 		UpdateTestImg((CScrollBar*)GetDlgItem(IDC_SLIDER_BRIGHTNESS));
 	}
@@ -158,7 +155,7 @@ void CDlg_Teaching_Brightness::OnEnChangeEditContrastVal()
 
 	m_Slider_Contrast.SetPos(m_fEdit_Value_Contrast);
 
-	if (m_pDlgItem->m_ViewData_Src.img != NULL)
+	if (m_ViewData_Src.img != NULL)
 	{
 		UpdateTestImg((CScrollBar*)GetDlgItem(IDC_SLIDER_CONTRAST));
 	}
@@ -168,32 +165,24 @@ void CDlg_Teaching_Brightness::OnEnChangeEditContrastVal()
 
 LRESULT CDlg_Teaching_Brightness::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
-	m_pDlgItem->m_ViewData_Src.img = (Mat*)lParam;
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
+	m_ViewData_Src.img = (Mat*)lParam;
+	DrawViewData(m_ViewData_Src);
 
 	return 0;
 }
 
 int CDlg_Teaching_Brightness::GetBrightness()
 {
+	UpdateData(TRUE);
 	return m_iEdit_Brightness;
+	UpdateData(FALSE);
 }
 
 float CDlg_Teaching_Brightness::GetContrast()
 {
+	UpdateData(TRUE);
 	return m_fEdit_Contrast;
+	UpdateData(FALSE);
 }
 
 
-void CDlg_Teaching_Brightness::OnEnChangeEditBrightness()
-{
-	if (m_iEdit_Brightness < 1)
-		m_iEdit_Brightness = 1;
-}
-
-
-void CDlg_Teaching_Brightness::OnEnChangeEditContrast()
-{
-	if (m_fEdit_Contrast < 1)
-		m_fEdit_Contrast = 1;
-}

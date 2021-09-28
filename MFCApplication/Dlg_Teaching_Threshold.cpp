@@ -19,7 +19,6 @@ CDlg_Teaching_Threshold::CDlg_Teaching_Threshold(CWnd* pParent /*=NULL*/)
 	, m_iEdit_Threshold_Value(0)
 {
 	m_pOpenCV = make_unique<COpenCV>();
-	m_pDlgItem = make_unique<CDlgItem>();
 }
 
 CDlg_Teaching_Threshold::~CDlg_Teaching_Threshold()
@@ -61,8 +60,8 @@ BOOL CDlg_Teaching_Threshold::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	m_pDlgItem->m_pWnd = GetDlgItem((IDC_STATIC_THRESHOLD_TEST));
-	m_pDlgItem->InitViewData(m_pDlgItem->m_pWnd);
+	m_pWnd = GetDlgItem((IDC_STATIC_THRESHOLD_TEST));
+	InitViewData(m_pWnd);
 
 	m_Cmb_Adp_Type.AddString(_T("ADAPTIVE_THRESH_MEAN_C"));
 	m_Cmb_Adp_Type.AddString(_T("ADAPTIVE_THRESH_GAUSSIAN_C"));
@@ -189,8 +188,8 @@ void CDlg_Teaching_Threshold::UpdateTestImg()
 	tThresholdParams.iThreshold = m_iEdit_Threshold_Value;
 	tThresholdParams.eType = (ThresholdTypes)GetThresholdMethod();
 
-	m_pOpenCV->ThresHold(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tThresholdParams);
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Dst);
+	m_pOpenCV->ThresHold(*m_ViewData_Src.img, *m_ViewData_Dst.img, tThresholdParams);
+	DrawViewData(m_ViewData_Dst);
 }
 
 
@@ -208,8 +207,8 @@ void CDlg_Teaching_Threshold::OnEnChangeEditThreshold()
 
 LRESULT CDlg_Teaching_Threshold::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
-	m_pDlgItem->m_ViewData_Src.img = (Mat*)lParam;
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
+	m_ViewData_Src.img = (Mat*)lParam;
+	DrawViewData(m_ViewData_Src);
 
 	return 0;
 }
@@ -244,7 +243,7 @@ void CDlg_Teaching_Threshold::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pSc
 
 		m_iEdit_Threshold_Value = m_Slider_Threshold.GetPos();
 
-		if (m_pDlgItem->m_ViewData_Src.img->empty() != TRUE)
+		if (m_ViewData_Src.img->empty() != TRUE)
 		{
 			UpdateTestImg();
 		}
@@ -270,7 +269,7 @@ void CDlg_Teaching_Threshold::OnEnChangeEditThresholdVal()
 
 	m_Slider_Threshold.SetPos(m_iEdit_Threshold_Value);
 
-	if (m_pDlgItem->m_ViewData_Src.img != NULL)
+	if (m_ViewData_Src.img != NULL)
 	{
 		UpdateTestImg();
 	}
@@ -282,7 +281,7 @@ void CDlg_Teaching_Threshold::OnEnChangeEditThresholdVal()
 void CDlg_Teaching_Threshold::OnPaint()
 {
 	CPaintDC dc(this); 
-	m_pDlgItem->DrawImage(m_pDlgItem->m_ViewData_Dst);
+	DrawImage(m_ViewData_Dst);
 }
 
 
@@ -290,5 +289,5 @@ void CDlg_Teaching_Threshold::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	m_pDlgItem->ReleaseViewData();
+	ReleaseViewData();
 }

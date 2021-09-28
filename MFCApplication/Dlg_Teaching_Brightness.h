@@ -4,7 +4,7 @@
 
 // CDlg_Teaching_Brightness 대화 상자입니다.
 
-class CDlg_Teaching_Brightness : public CDialogEx
+class CDlg_Teaching_Brightness : public CDialogEx , public CDlgItem
 {
 	DECLARE_DYNAMIC(CDlg_Teaching_Brightness)
 
@@ -23,7 +23,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-	unique_ptr<CDlgItem> m_pDlgItem;
 	unique_ptr<COpenCV>m_pOpenCV;
 	Mat* m_pModelImg;
 
@@ -45,8 +44,7 @@ public:
 	afx_msg void OnEnChangeEditBrightnessVal();
 	afx_msg void OnEnChangeEditContrastVal();
 	afx_msg LRESULT OnReceiveImg(WPARAM wParam, LPARAM lParam);
-	afx_msg void OnEnChangeEditBrightness();
-	afx_msg void OnEnChangeEditContrast();
+
 
 	int GetBrightness();
 	float GetContrast();

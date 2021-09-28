@@ -5,7 +5,7 @@
 
 // CDlg_Teaching_Histogram 대화 상자입니다.
 
-class CDlg_Teaching_Histogram : public CDialogEx
+class CDlg_Teaching_Histogram : public CDialogEx , public CDlgItem
 {
 	DECLARE_DYNAMIC(CDlg_Teaching_Histogram)
 
@@ -24,7 +24,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-	unique_ptr<CDlgItem> m_pDlgItem;
 	unique_ptr<COpenCV> m_pOpenCV;
 public:
 

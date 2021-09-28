@@ -21,7 +21,6 @@ CDlg_Teaching_Morphology::CDlg_Teaching_Morphology(CWnd* pParent /*=NULL*/)
 	, m_iEdit_Morph_Size_Value(0)
 {
 	m_pOpenCV = make_unique<COpenCV>();
-	m_pDlgItem = make_unique<CDlgItem>();
 }
 
 CDlg_Teaching_Morphology::~CDlg_Teaching_Morphology()
@@ -65,8 +64,8 @@ BOOL CDlg_Teaching_Morphology::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	m_pDlgItem->m_pWnd = GetDlgItem((IDC_STATIC_MORPHOLOGY_TEST));
-	m_pDlgItem->InitViewData(m_pDlgItem->m_pWnd);
+	m_pWnd = GetDlgItem((IDC_STATIC_MORPHOLOGY_TEST));
+	InitViewData(m_pWnd);
 
 	m_Cmb_Element_Shape.AddString(_T("MORPH_RECT"));
 	m_Cmb_Element_Shape.AddString(_T("MORPH_CROSS"));
@@ -192,7 +191,7 @@ void CDlg_Teaching_Morphology::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 
 		m_iEdit_Morph_Size_Value = m_Slider_Morph_Size.GetPos();
 
-		if (m_pDlgItem->m_ViewData_Src.img->empty() != TRUE)
+		if (m_ViewData_Src.img->empty() != TRUE)
 		{
 			UpdateTestImg();
 		}
@@ -219,7 +218,7 @@ void CDlg_Teaching_Morphology::OnEnChangeEditMorphSizeValue()
 
 	m_Slider_Morph_Size.SetPos(m_iEdit_Morph_Size_Value);
 
-	if (m_pDlgItem->m_ViewData_Src.img != NULL)
+	if (m_ViewData_Src.img != NULL)
 	{
 		UpdateTestImg();
 	}
@@ -239,15 +238,15 @@ void CDlg_Teaching_Morphology::UpdateTestImg()
 	tMorphologyParams.Anchor = Point(m_iEdit_Morph_AnchorX, m_iEdit_Morph_AnchorY);
 	tMorphologyParams.Kernel = getStructuringElement(tElementParams.eShape, tElementParams.ksize, tElementParams.anchor);
 
-	m_pOpenCV->Morphology(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tMorphologyParams, tElementParams);
+	m_pOpenCV->Morphology(*m_ViewData_Src.img, *m_ViewData_Dst.img, tMorphologyParams, tElementParams);
 
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Dst);
+	DrawViewData(m_ViewData_Dst);
 }
 
 LRESULT CDlg_Teaching_Morphology::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
-	m_pDlgItem->m_ViewData_Src.img = (Mat*)lParam;
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
+	m_ViewData_Src.img = (Mat*)lParam;
+	DrawViewData(m_ViewData_Src);
 
 	return 0;
 }
@@ -281,7 +280,7 @@ int CDlg_Teaching_Morphology::GetElementAnchorY()
 void CDlg_Teaching_Morphology::OnPaint()
 {
 	CPaintDC dc(this);
-	m_pDlgItem->DrawImage(m_pDlgItem->m_ViewData_Dst);
+	DrawImage(m_ViewData_Dst);
 }
 
 
@@ -289,5 +288,5 @@ void CDlg_Teaching_Morphology::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	m_pDlgItem->ReleaseViewData();
+	ReleaseViewData();
 }

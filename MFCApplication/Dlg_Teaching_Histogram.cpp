@@ -19,7 +19,6 @@ CDlg_Teaching_Histogram::CDlg_Teaching_Histogram(CWnd* pParent /*=NULL*/)
 	, m_iEdit_Value_Max(256)
 {
 	m_pOpenCV = make_unique<COpenCV>();
-	m_pDlgItem = make_unique<CDlgItem>();
 }
 
 CDlg_Teaching_Histogram::~CDlg_Teaching_Histogram()
@@ -59,7 +58,7 @@ void CDlg_Teaching_Histogram::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pSc
 
 		m_iEdit_Value_Bin_Number = m_Slider_Histogram.GetPos();
 
-		if (m_pDlgItem->m_ViewData_Src.img->empty() != TRUE)
+		if (m_ViewData_Src.img->empty() != TRUE)
 		{
 			UpdateTestImg();
 		}
@@ -76,16 +75,16 @@ void CDlg_Teaching_Histogram::UpdateTestImg()
 	tHistogramParams.iValueMin = m_iEdit_Value_Min;
 	tHistogramParams.iValueMax = m_iEdit_Value_Max;
 
-	m_pOpenCV->Histogram(*m_pDlgItem->m_ViewData_Src.img, *m_pDlgItem->m_ViewData_Dst.img, tHistogramParams);
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Dst);
+	m_pOpenCV->Histogram(*m_ViewData_Src.img, *m_ViewData_Dst.img, tHistogramParams);
+	DrawViewData(m_ViewData_Dst);
 }
 
 BOOL CDlg_Teaching_Histogram::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	m_pDlgItem->m_pWnd = GetDlgItem((IDC_STATIC_HISTOGRAM_TEST));
-	m_pDlgItem->InitViewData(m_pDlgItem->m_pWnd);
+	m_pWnd = GetDlgItem((IDC_STATIC_HISTOGRAM_TEST));
+	InitViewData(m_pWnd);
 
 	m_Slider_Histogram.SetRange(1, 256);
 	m_Slider_Histogram.SetPos(m_iEdit_Value_Bin_Number);
@@ -112,7 +111,7 @@ void CDlg_Teaching_Histogram::OnEnChangeEditValueBinNumber()
 
 	m_Slider_Histogram.SetPos(m_iEdit_Value_Bin_Number);
 
-	if (m_pDlgItem->m_ViewData_Src.img != NULL)
+	if (m_ViewData_Src.img != NULL)
 	{
 		UpdateTestImg();
 	}
@@ -122,8 +121,8 @@ void CDlg_Teaching_Histogram::OnEnChangeEditValueBinNumber()
 
 LRESULT CDlg_Teaching_Histogram::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
-	m_pDlgItem->m_ViewData_Src.img = (Mat*)lParam;
-	m_pDlgItem->DrawViewData(m_pDlgItem->m_ViewData_Src);
+	m_ViewData_Src.img = (Mat*)lParam;
+	DrawViewData(m_ViewData_Src);
 
 	return 0;
 }

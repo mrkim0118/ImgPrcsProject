@@ -17,7 +17,7 @@ using namespace cv::ml;
 
 
 
-class CDlg_ImgPrcs : public CDialogEx
+class CDlg_ImgPrcs : public CDialogEx , public CDlgItem
 {
 	DECLARE_DYNAMIC(CDlg_ImgPrcs)
 
@@ -37,7 +37,6 @@ protected:
 private:
 	//COpenCV *m_pOpenCV;
 	unique_ptr<COpenCV> m_pOpenCV;
-	unique_ptr<CDlgItem> m_pDlgItem;
 
 	unique_ptr<CDlg_Teaching_Threshold> m_pDlgThreshold;
 	unique_ptr<CDlg_Teaching_Morphology> m_pDlgMorphology;
