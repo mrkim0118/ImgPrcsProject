@@ -1,6 +1,6 @@
 #pragma once
 #include "afxcmn.h"
-
+#include "Dlg_Expansion_View.h"
 
 // CDlg_Teaching_Brightness 대화 상자입니다.
 
@@ -24,6 +24,8 @@ protected:
 
 private:
 	unique_ptr<COpenCV>m_pOpenCV;
+	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
+
 	Mat* m_pModelImg;
 
 	int m_iEdit_Brightness;
@@ -33,6 +35,7 @@ private:
 
 	CSliderCtrl m_Slider_Brightness;
 	CSliderCtrl m_Slider_Contrast;
+	CRect m_DlgRect_Dst;
 
 public:
 	void UpdateTestImg(CScrollBar* pScrollBar);
@@ -48,4 +51,6 @@ public:
 	float GetContrast();
 	afx_msg void OnPaint();
 	afx_msg void OnDestroy();
+
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

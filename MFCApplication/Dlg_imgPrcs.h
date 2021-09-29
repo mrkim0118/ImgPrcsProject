@@ -10,6 +10,7 @@
 #include "Dlg_Teaching_Template_Match.h"
 #include "Dlg_Teaching_Histogram.h"
 #include "Dlg_Teaching_Brightness.h"
+#include "Dlg_Expansion_View.h"
 
 using namespace cv;
 using namespace std;
@@ -43,14 +44,14 @@ private:
 	unique_ptr<CDlg_Teaching_Template_Match> m_pDlgTemplateMatch;
 	unique_ptr<CDlg_Teaching_Histogram> m_pDlgHistogram;
 	unique_ptr<CDlg_Teaching_Brightness> m_pDlgBrightness;
+	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 	list<CString> m_ImgFileList;
 
-
-	Mat* m_pMessageImg;
 	CComboBox m_Cmb_Mode;
 	CPoint m_ptROI_Start;
 	CPoint m_ptROI_End;
-	CRect m_DlgRect;
+	CRect m_DlgRect_Src;
+	CRect m_DlgRect_Dst;
 	CTabCtrl m_Teaching_Tab;
 	bool m_bClicked;
 	int m_iInspMode;
@@ -78,4 +79,5 @@ public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnDestroy();
 	afx_msg void OnBnClickedBtnCvtGray();
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

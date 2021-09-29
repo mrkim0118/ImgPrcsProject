@@ -46,6 +46,8 @@ BEGIN_MESSAGE_MAP(CDlg_Teaching_Histogram, CDialogEx)
 	ON_BN_CLICKED(IDC_CHK_STRETCH, &CDlg_Teaching_Histogram::OnBnClickedChkStretch)
 	ON_WM_PAINT()
 	ON_WM_DESTROY()
+	ON_WM_RBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -87,6 +89,12 @@ BOOL CDlg_Teaching_Histogram::OnInitDialog()
 
 	m_pWnd = GetDlgItem((IDC_STATIC_HISTOGRAM_TEST));
 	InitViewData(m_pWnd);
+	
+	m_pDlgExpansionView = make_unique<CDlg_Expansion_View>();
+	m_pDlgExpansionView->Create(IDD_DLG_EXPANSION_VIEW, this);
+	m_pDlgExpansionView->ShowWindow(SW_HIDE);
+
+	GetDlgItem(IDC_STATIC_HISTOGRAM_TEST)->GetWindowRect(&m_DlgRect_Dst);
 
 	m_Slider_Histogram.SetRange(1, 256);
 	m_Slider_Histogram.SetPos(m_iEdit_Value_Bin_Number);
@@ -169,4 +177,20 @@ void CDlg_Teaching_Histogram::OnDestroy()
 	__super::OnDestroy();
 
 	ReleaseViewData();
+}
+
+
+
+void CDlg_Teaching_Histogram::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if (m_DlgRect_Dst.PtInRect(point))
+	{
+		*m_pMessageImg = m_ViewData_Dst.img->clone();
+		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+	}
+
+	m_pDlgExpansionView->ShowWindow(SW_SHOW);
+
+
+	__super::OnRButtonDown(nFlags, point);
 }

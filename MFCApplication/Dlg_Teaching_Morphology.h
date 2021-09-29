@@ -1,7 +1,7 @@
 #pragma once
 #include "afxwin.h"
 #include "afxcmn.h"
-
+#include "Dlg_Expansion_View.h"
 
 // CDlg_Teaching_Morphology 대화 상자입니다.
 
@@ -24,10 +24,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	unique_ptr<COpenCV> m_pOpenCV;
+	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 
 	CComboBox m_Cmb_Morph_Operation;
 	CComboBox m_Cmb_Element_Shape;
 	CSliderCtrl m_Slider_Morph_Size;
+
+	CRect m_DlgRect_Dst;
 
 	int m_iEdit_Morph_AnchorX;
 	int m_iEdit_Morph_AnchorY;
@@ -60,4 +63,6 @@ public:
 	int GetElementShape();
 	int GetMorphologyOperation();
 	void UpdateTestImg();
+
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

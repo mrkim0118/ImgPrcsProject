@@ -50,6 +50,8 @@ BEGIN_MESSAGE_MAP(CDlg_Teaching_Threshold, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT_THRESHOLD_VAL, &CDlg_Teaching_Threshold::OnEnChangeEditThresholdVal)
 	ON_WM_PAINT()
 	ON_WM_DESTROY()
+	ON_WM_RBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -62,6 +64,12 @@ BOOL CDlg_Teaching_Threshold::OnInitDialog()
 
 	m_pWnd = GetDlgItem((IDC_STATIC_THRESHOLD_TEST));
 	InitViewData(m_pWnd);
+
+	m_pDlgExpansionView = make_unique<CDlg_Expansion_View>();
+	m_pDlgExpansionView->Create(IDD_DLG_EXPANSION_VIEW, this);
+	m_pDlgExpansionView->ShowWindow(SW_HIDE);
+
+	GetDlgItem(IDC_STATIC_THRESHOLD_TEST)->GetWindowRect(&m_DlgRect_Dst);
 
 	m_Cmb_Adp_Type.AddString(_T("ADAPTIVE_THRESH_MEAN_C"));
 	m_Cmb_Adp_Type.AddString(_T("ADAPTIVE_THRESH_GAUSSIAN_C"));
@@ -290,4 +298,17 @@ void CDlg_Teaching_Threshold::OnDestroy()
 	CDialogEx::OnDestroy();
 
 	ReleaseViewData();
+}
+
+
+
+
+void CDlg_Teaching_Threshold::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if (m_DlgRect_Dst.PtInRect(point))
+	{
+		*m_pMessageImg = m_ViewData_Dst.img->clone();
+		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+	}
+	__super::OnRButtonDown(nFlags, point);
 }

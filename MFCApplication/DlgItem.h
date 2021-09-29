@@ -19,6 +19,8 @@ public:
 	ViewData m_ViewData_Src;
 	ViewData m_ViewData_Dst;
 
+	Mat *m_pMessageImg;
+
 	void CorrectBitMapWidth(Mat SrcImg, Mat& DstImg);
 	void CreateBitMapInfo(ViewData &View);
 	void DrawImage(ViewData &View);
@@ -26,6 +28,7 @@ public:
 	void InitViewData(CWnd* pWnd , CWnd* pWnd_Ext = NULL);
 	void ReleaseViewData();
 	void DrawViewData(ViewData &View);
-	
+
+	void UpdateTestImg();
 };
 

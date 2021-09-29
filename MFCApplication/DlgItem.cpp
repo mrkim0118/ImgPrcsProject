@@ -117,6 +117,8 @@ void CDlgItem::InitViewData(CWnd* pWnd, CWnd* pWnd_Ext /*= NULL*/)
 	this->m_ViewData_Dst.ScreenImg = new Mat;
 	this->m_ViewData_Src.dc = new CClientDC(pWnd);
 
+	this->m_pMessageImg = new Mat;
+
 	pWnd->GetClientRect(&this->m_ViewData_Src.rect);
 
 	if (pWnd_Ext == NULL)
@@ -144,6 +146,7 @@ void CDlgItem::ReleaseViewData()
 	delete this->m_ViewData_Dst.ScreenImg;
 	delete this->m_ViewData_Src.dc;
 	delete this->m_ViewData_Dst.dc;
+	delete this->m_pMessageImg;
 }
 
 void CDlgItem::DrawViewData(ViewData & View)
@@ -152,3 +155,8 @@ void CDlgItem::DrawViewData(ViewData & View)
 	CreateBitMapInfo(View);
 	DrawImage(View);
 }
+
+void CDlgItem::UpdateTestImg()
+{
+}
+

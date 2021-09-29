@@ -1,6 +1,6 @@
 #pragma once
 #include "afxwin.h"
-
+#include "Dlg_Expansion_View.h"
 
 // CDlg_Teaching_Template_Match 대화 상자입니다.
 
@@ -25,6 +25,8 @@ protected:
 private:
 	Mat* m_pModelImg;
 	CComboBox m_Cmb_Method;
+	CRect m_DlgRect_Dst;
+	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 
 public:
 	virtual BOOL OnInitDialog();
@@ -39,4 +41,5 @@ public:
 
 	void CreateModelImg(Mat SrcImg , Mat& DstImg, CPoint ptStart , CPoint ptEnd , CRect rect);
 
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

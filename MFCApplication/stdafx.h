@@ -34,6 +34,7 @@
 #include "opencv2/opencv.hpp"
 #include "DlgItem.h"
 
+
 #ifdef _UNICODE
 #if defined _M_IX86
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -62,4 +63,5 @@
 #define WM_TEMPLATE_MATCH_MODEL (WM_USER + 3)
 #define WM_TEMPLATE_MATCH_NORM (WM_USER + 4)
 #define WM_HISTOGRAM (WM_USER + 5)
-#define WM_BRIGHTNESS (WM_USER + 6 )
+#define WM_BRIGHTNESS (WM_USER + 6)
+#define WM_EXPANSION_VIEW (WM_USER + 7)

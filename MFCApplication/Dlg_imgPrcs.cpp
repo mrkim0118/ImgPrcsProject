@@ -79,6 +79,7 @@ void CDlg_ImgPrcs::InitTeachingTab()
 	m_pDlgBrightness->MoveWindow(0, 20, rect.Width(), rect.Height());
 	m_pDlgBrightness->ShowWindow(SW_HIDE);
 
+
 }
 
 int CDlg_ImgPrcs::GetInspMode()
@@ -180,6 +181,7 @@ BEGIN_MESSAGE_MAP(CDlg_ImgPrcs, CDialogEx)
 	ON_WM_MOUSEMOVE()
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDC_BTN_CVT_GRAY, &CDlg_ImgPrcs::OnBnClickedBtnCvtGray)
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -218,7 +220,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnLoadImg()
 
 void CDlg_ImgPrcs::OnMenuImgPrcs()
 {
-	DoModal();
+	this->DoModal();
 }
 
 
@@ -244,6 +246,11 @@ BOOL CDlg_ImgPrcs::OnInitDialog()
 	m_pMessageImg = new Mat;
 	InitTeachingTab();
 
+	m_pDlgExpansionView = make_unique<CDlg_Expansion_View>();
+	m_pDlgExpansionView->Create(IDD_DLG_EXPANSION_VIEW, this);
+	m_pDlgExpansionView->ShowWindow(SW_HIDE);
+	
+
 	m_Cmb_Mode.AddString(_T("Threshold")); 
 	m_Cmb_Mode.AddString(_T("Morphorogy")); 
 	m_Cmb_Mode.AddString(_T("TemplateMatch"));
@@ -259,8 +266,14 @@ BOOL CDlg_ImgPrcs::OnInitDialog()
 	InitViewData(m_pWnd, m_pWnd_Ext);
 	m_pDlgThreshold->ShowWindow(SW_SHOW);
 
-	GetDlgItem(IDC_STATIC_SRC_VIEW)->GetWindowRect(&m_DlgRect);
-	ScreenToClient(&m_DlgRect);
+	GetDlgItem(IDC_STATIC_SRC_VIEW)->GetWindowRect(&m_DlgRect_Src);
+	GetDlgItem(IDC_STATIC_DST_VIEW)->GetWindowRect(&m_DlgRect_Dst);
+
+	ScreenToClient(&m_DlgRect_Src);
+	ScreenToClient(&m_DlgRect_Dst);
+
+	//m_pExpansion_View->Create(IDD_DLG_EXPANSION_VIEW, this);
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
@@ -481,21 +494,35 @@ void CDlg_ImgPrcs::OnCbnSelchangeCmbMode()
 	switch (m_iInspMode)
 	{
 	case CImgPrcs::_MODE_THRESHOLD_:
+	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgThreshold->ShowWindow(SW_SHOW);
 		break;
+	}
 	case CImgPrcs::_MODE_MORPHOLOGY_:
+	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgMorphology->ShowWindow(SW_SHOW);
 		break;
+	}
 	case CImgPrcs::_MODE_TEMPLATE_MATCH_:
+	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Model"));
 		m_pDlgTemplateMatch->ShowWindow(SW_SHOW);
 		break;
+	}
 	case CImgPrcs::_MODE_HISTOGRAM_:
+	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgHistogram->ShowWindow(SW_SHOW);
 		break;
+	}
 	case CImgPrcs::_MODE_BRIGHTNESS_:
+	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgBrightness->ShowWindow(SW_SHOW);
 		break;
-
+	}
 	}
 
 	m_Teaching_Tab.SetCurSel(m_iInspMode);
@@ -507,10 +534,10 @@ void CDlg_ImgPrcs::OnLButtonDown(UINT nFlags, CPoint point)
 	m_iInspMode = GetInspMode();
 	if (m_iInspMode == CImgPrcs::_MODE_TEMPLATE_MATCH_)
 	{
-		if(m_DlgRect.PtInRect(point))
+		if(m_DlgRect_Src.PtInRect(point))
 		{
-			point.x = point.x - m_DlgRect.left;
-			point.y = point.y - m_DlgRect.top;
+			point.x = point.x - m_DlgRect_Src.left;
+			point.y = point.y - m_DlgRect_Src.top;
 
 			m_ptROI_Start = point;
 			m_bClicked = true;
@@ -523,10 +550,10 @@ void CDlg_ImgPrcs::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	if (m_iInspMode == CImgPrcs::_MODE_TEMPLATE_MATCH_)
 	{
-		if (m_DlgRect.PtInRect(point))
+		if (m_DlgRect_Src.PtInRect(point))
 		{
-			point.x = point.x - m_DlgRect.left;
-			point.y = point.y - m_DlgRect.top;
+			point.x = point.x - m_DlgRect_Src.left;
+			point.y = point.y - m_DlgRect_Src.top;
 
 			m_bClicked = false;
 			m_ptROI_End = point;
@@ -540,10 +567,10 @@ void CDlg_ImgPrcs::OnLButtonUp(UINT nFlags, CPoint point)
 void CDlg_ImgPrcs::OnMouseMove(UINT nFlags, CPoint point)
 {
 
-	if (m_DlgRect.PtInRect(point))
+	if (m_DlgRect_Src.PtInRect(point))
 	{
-		point.x = point.x - m_DlgRect.left;
-		point.y = point.y - m_DlgRect.top;
+		point.x = point.x - m_DlgRect_Src.left;
+		point.y = point.y - m_DlgRect_Src.top;
 
 		if (m_bClicked == true)
 		{
@@ -562,12 +589,7 @@ void CDlg_ImgPrcs::OnDestroy()
 	CDialogEx::OnDestroy();
 
 	ReleaseViewData();
-	
-	if (m_pMessageImg != NULL)
-	{
-		delete m_pMessageImg;
-		m_pMessageImg = NULL;
-	}
+
 }
 
 
@@ -578,4 +600,23 @@ void CDlg_ImgPrcs::OnBnClickedBtnCvtGray()
 		cvtColor(*m_ViewData_Src.img, *m_ViewData_Src.img, COLOR_RGB2GRAY);
 		DrawViewData(m_ViewData_Src);
 	}
+}
+
+
+void CDlg_ImgPrcs::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if (m_DlgRect_Dst.PtInRect(point))
+	{
+		*m_pMessageImg = m_ViewData_Dst.img->clone();
+		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+	}
+	else if (m_DlgRect_Src.PtInRect(point))
+	{
+		*m_pMessageImg = m_ViewData_Dst.img->clone();
+		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+	}
+
+	//m_pDlgExpansionView->DoModal();
+	m_pDlgExpansionView->ShowWindow(SW_SHOW);
+	__super::OnRButtonDown(nFlags, point);
 }

@@ -38,6 +38,8 @@ BEGIN_MESSAGE_MAP(CDlg_Teaching_Template_Match, CDialogEx)
 	ON_MESSAGE(WM_TEMPLATE_MATCH_NORM, OnReceiveNorm)
 	ON_WM_PAINT()
 	ON_WM_DESTROY()
+	ON_WM_RBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -51,6 +53,12 @@ BOOL CDlg_Teaching_Template_Match::OnInitDialog()
 	m_pWnd = GetDlgItem(IDC_STATIC_TEMPLATE_MODEL);
 	m_pWnd_Ext = GetDlgItem(IDC_STATIC_TEMPLATE_NORMALIZE);
 	InitViewData(m_pWnd , m_pWnd_Ext);
+
+	m_pDlgExpansionView = make_unique<CDlg_Expansion_View>();
+	m_pDlgExpansionView->Create(IDD_DLG_EXPANSION_VIEW, this);
+	m_pDlgExpansionView->ShowWindow(SW_HIDE);
+
+	GetDlgItem(IDC_STATIC_TEMPLATE_MODEL)->GetWindowRect(&m_DlgRect_Dst);
 
 	m_Cmb_Method.AddString(_T("TM_SQDIFF"));
 	m_Cmb_Method.AddString(_T("TM_SQDIFF_NORMED"));
@@ -129,45 +137,6 @@ void CDlg_Teaching_Template_Match::CreateModelImg(Mat SrcImg, Mat& DstImg, CPoin
 
 	Rect ROI(iStartX, IStartY, iWidth, iHeight);
 	DstImg = SrcImg(ROI);
-
-	//CorrectBitMapWidth()
-
-	//// Width 값 4의 배수로 맞추기.
-	//int iModelSpanWidth = 0;
-
-	//iModelSpanWidth = iWidth;
-	//if (iModelSpanWidth % 4 != 0)
-	//{
-	//	iModelSpanWidth = iWidth + (4 - iWidth % 4);
-	//}
-	//else
-	//{
-	//	iModelSpanWidth = iWidth;
-	//}
-
-	//Mat newimg(iHeight, iModelSpanWidth, rectimg.type());
-
-	//for (int j = 0; j < rectimg.rows; j++)
-	//{
-	//	uchar *p = newimg.ptr<uchar>(j);
-	//	for (int i = 0; i < iModelSpanWidth; i++)
-	//	{
-	//		if (i >= rectimg.cols)
-	//		{
-	//			p[i * 3 + 0] = 0;
-	//			p[i * 3 + 1] = 0;
-	//			p[i * 3 + 2] = 0;
-	//		}
-	//		else
-	//		{
-	//			p[i * 3 + 0] = rectimg.at<uchar>(j, (i * 3 + 0));
-	//			p[i * 3 + 1] = rectimg.at<uchar>(j, (i * 3 + 1));
-	//			p[i * 3 + 2] = rectimg.at<uchar>(j, (i * 3 + 2));
-	//		}
-	//	}
-	//}
-	//DstImg = newimg.clone();
-
 }
 LRESULT CDlg_Teaching_Template_Match::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
@@ -199,4 +168,21 @@ void CDlg_Teaching_Template_Match::OnDestroy()
 
 	ReleaseViewData();
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}
+
+
+
+
+void CDlg_Teaching_Template_Match::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if (m_DlgRect_Dst.PtInRect(point))
+	{
+		*m_pMessageImg = m_ViewData_Dst.img->clone();
+		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+	}
+
+	m_pDlgExpansionView->ShowWindow(SW_SHOW);
+
+
+	__super::OnRButtonDown(nFlags, point);
 }

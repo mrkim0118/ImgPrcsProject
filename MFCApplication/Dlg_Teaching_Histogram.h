@@ -1,7 +1,7 @@
 #pragma once
 #include "afxcmn.h"
 #include "afxwin.h"
-
+#include "Dlg_Expansion_View.h"
 
 // CDlg_Teaching_Histogram 대화 상자입니다.
 
@@ -25,6 +25,7 @@ protected:
 
 private:
 	unique_ptr<COpenCV> m_pOpenCV;
+	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 
 	UINT m_iEdit_Bin_Num;
 	UINT m_iEdit_Value_Bin_Number;
@@ -35,6 +36,9 @@ private:
 	CButton m_Chk_Stretch;
 
 	CSliderCtrl m_Slider_Histogram;
+
+	CRect m_DlgRect_Dst;
+
 
 public:
 	virtual BOOL OnInitDialog();
@@ -49,4 +53,6 @@ public:
 	int GetStretchUse();
 	afx_msg void OnPaint();
 	afx_msg void OnDestroy();
+
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

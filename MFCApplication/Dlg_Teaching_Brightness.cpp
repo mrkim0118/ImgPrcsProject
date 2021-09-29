@@ -44,6 +44,8 @@ BEGIN_MESSAGE_MAP(CDlg_Teaching_Brightness, CDialogEx)
 	ON_MESSAGE(WM_BRIGHTNESS, OnReceiveImg)
 	ON_WM_PAINT()
 	ON_WM_DESTROY()
+	ON_WM_RBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -102,6 +104,12 @@ BOOL CDlg_Teaching_Brightness::OnInitDialog()
 
 	m_pWnd = GetDlgItem((IDC_STATIC_BRIGHTNESS_TEST));
 	InitViewData(m_pWnd);
+
+	m_pDlgExpansionView = make_unique<CDlg_Expansion_View>();
+	m_pDlgExpansionView->Create(IDD_DLG_EXPANSION_VIEW, this);
+	m_pDlgExpansionView->ShowWindow(SW_HIDE);
+
+	GetDlgItem(IDC_STATIC_BRIGHTNESS_TEST)->GetWindowRect(&m_DlgRect_Dst);
 
 	m_Slider_Brightness.SetRange(0, 512);
 	m_Slider_Brightness.SetPos(m_iEdit_Value_Brightness+256);
@@ -204,4 +212,19 @@ void CDlg_Teaching_Brightness::OnDestroy()
 
 	ReleaseViewData();
 
+}
+
+
+void CDlg_Teaching_Brightness::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if (m_DlgRect_Dst.PtInRect(point))
+	{
+		*m_pMessageImg = m_ViewData_Dst.img->clone();
+		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+	}
+
+	m_pDlgExpansionView->ShowWindow(SW_SHOW);
+
+
+	__super::OnRButtonDown(nFlags, point);
 }

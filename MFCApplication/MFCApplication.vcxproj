@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DlgItem.h" />
+    <ClInclude Include="Dlg_Expansion_View.h" />
     <ClInclude Include="Dlg_imgPrcs.h" />
     <ClInclude Include="Dlg_Teaching_Brightness.h" />
     <ClInclude Include="Dlg_Teaching_Histogram.h" />
@@ -222,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DlgItem.cpp" />
+    <ClCompile Include="Dlg_Expansion_View.cpp" />
     <ClCompile Include="Dlg_imgPrcs.cpp" />
     <ClCompile Include="Dlg_Teaching_Brightness.cpp" />
     <ClCompile Include="Dlg_Teaching_Histogram.cpp" />
