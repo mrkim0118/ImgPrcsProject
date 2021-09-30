@@ -70,6 +70,7 @@ BOOL CDlg_Teaching_Threshold::OnInitDialog()
 	m_pDlgExpansionView->ShowWindow(SW_HIDE);
 
 	GetDlgItem(IDC_STATIC_THRESHOLD_TEST)->GetWindowRect(&m_DlgRect_Dst);
+	ScreenToClient(&m_DlgRect_Dst);
 
 	m_Cmb_Adp_Type.AddString(_T("ADAPTIVE_THRESH_MEAN_C"));
 	m_Cmb_Adp_Type.AddString(_T("ADAPTIVE_THRESH_GAUSSIAN_C"));
@@ -216,6 +217,7 @@ void CDlg_Teaching_Threshold::OnEnChangeEditThreshold()
 LRESULT CDlg_Teaching_Threshold::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
 	m_ViewData_Src.img = (Mat*)lParam;
+	*m_ViewData_Dst.img = m_ViewData_Src.img->clone();
 	DrawViewData(m_ViewData_Src);
 
 	return 0;
@@ -257,6 +259,7 @@ void CDlg_Teaching_Threshold::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pSc
 		}
 
 		UpdateData(FALSE);
+		m_pDlgExpansionView->RefreshView(*m_ViewData_Dst.img);
 	}
 
 	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
@@ -309,6 +312,8 @@ void CDlg_Teaching_Threshold::OnRButtonDown(UINT nFlags, CPoint point)
 	{
 		*m_pMessageImg = m_ViewData_Dst.img->clone();
 		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
+
 	__super::OnRButtonDown(nFlags, point);
 }

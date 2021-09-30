@@ -129,8 +129,8 @@ void CDlg_Teaching_Template_Match::CreateModelImg(Mat SrcImg, Mat& DstImg, CPoin
 	double ry = ((double)iPoint_Top / rect.bottom);
 	double ry2 = ((double)iPoint_Bottom / rect.bottom);
 
-	int iStartX = (int)SrcImg.cols*rx;
-	int IStartY = (int)SrcImg.rows*ry;
+	int iStartX = (int)(SrcImg.cols*rx);
+	int IStartY = (int)(SrcImg.rows*ry);
 
 	int iWidth = (int)(SrcImg.cols*rx2 - SrcImg.cols*rx);
 	int iHeight = (int)(SrcImg.rows*ry2 - SrcImg.rows*ry);
@@ -141,6 +141,7 @@ void CDlg_Teaching_Template_Match::CreateModelImg(Mat SrcImg, Mat& DstImg, CPoin
 LRESULT CDlg_Teaching_Template_Match::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
 	m_ViewData_Src.img = (Mat*)lParam;
+	*m_ViewData_Dst.img = m_ViewData_Src.img->clone();
 	DrawViewData(m_ViewData_Src);
 	*m_pModelImg = m_ViewData_Src.img->clone();
 
@@ -179,9 +180,8 @@ void CDlg_Teaching_Template_Match::OnRButtonDown(UINT nFlags, CPoint point)
 	{
 		*m_pMessageImg = m_ViewData_Dst.img->clone();
 		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
-
-	m_pDlgExpansionView->ShowWindow(SW_SHOW);
 
 
 	__super::OnRButtonDown(nFlags, point);

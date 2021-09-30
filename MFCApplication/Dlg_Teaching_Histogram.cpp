@@ -68,7 +68,9 @@ void CDlg_Teaching_Histogram::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pSc
 		}
 
 		UpdateData(FALSE);
+		m_pDlgExpansionView->RefreshView(*m_ViewData_Dst.img);
 	}
+
 
 	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
 }
@@ -108,8 +110,8 @@ BOOL CDlg_Teaching_Histogram::OnInitDialog()
 
 void CDlg_Teaching_Histogram::OnEnChangeEditValueBinNumber()
 {
-	int iMin = m_Slider_Histogram.GetRangeMin();
-	int iMax = m_Slider_Histogram.GetRangeMax();
+	UINT iMin = m_Slider_Histogram.GetRangeMin();
+	UINT iMax = m_Slider_Histogram.GetRangeMax();
 
 	UpdateData(TRUE);
 
@@ -132,6 +134,7 @@ void CDlg_Teaching_Histogram::OnEnChangeEditValueBinNumber()
 LRESULT CDlg_Teaching_Histogram::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
 	m_ViewData_Src.img = (Mat*)lParam;
+	*m_ViewData_Dst.img = m_ViewData_Src.img->clone();
 	DrawViewData(m_ViewData_Src);
 
 	return 0;
@@ -187,9 +190,8 @@ void CDlg_Teaching_Histogram::OnRButtonDown(UINT nFlags, CPoint point)
 	{
 		*m_pMessageImg = m_ViewData_Dst.img->clone();
 		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
-
-	m_pDlgExpansionView->ShowWindow(SW_SHOW);
 
 
 	__super::OnRButtonDown(nFlags, point);

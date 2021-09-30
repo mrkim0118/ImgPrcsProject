@@ -110,7 +110,7 @@ void CEtc::WriteLog(CString strSavePath ,CString strLog)
 	
 	CString strTemp = _T("");
 
-	strTemp.Format(_T("[%d-%d-%d-%d-%d-%d.] %s" ), iYear , iMonth , iDay , iHour , iMin , iSec , strLog);
+	strTemp.Format(_T("[%d-%d-%d %d:%d:%d.] %s" ), iYear , iMonth , iDay , iHour , iMin , iSec , strLog);
 
 	FILE *fp = NULL;
 
@@ -125,10 +125,10 @@ void CEtc::SaveCSV(CString strFilePath, vector<CString> Data , CString strTitle 
 {
 	FILE *hFP = NULL;
 
-	const char *chFilePath;
-	chFilePath = (CStringA)strFilePath;
+	const char *chTmp;
+	chTmp = (CStringA)strFilePath;
 
-	if (fopen_s(&hFP, chFilePath, "a+") != 0)
+	if (fopen_s(&hFP, chTmp, "a+") != 0)
 	{
 		return;
 	}
@@ -138,20 +138,20 @@ void CEtc::SaveCSV(CString strFilePath, vector<CString> Data , CString strTitle 
 
 	if (lSize < 1)
 	{
-		chFilePath = (CStringA)strTitle;
-		fprintf(hFP, "%s\n", chFilePath);
+		chTmp = (CStringA)strTitle;
+		fprintf(hFP, "%s\n", chTmp);
 	}
 	for (vector<CString>::iterator itr = Data.begin(); itr != Data.end(); itr++)
 	{
-		chFilePath = (CStringA)*itr;
-		fprintf(hFP, "%s\n", chFilePath);
+		chTmp = (CStringA)*itr;
+		fprintf(hFP, "%s\n", chTmp);
 	}
 	fclose(hFP);
 
-	if (chFilePath != NULL)
+	if (chTmp != NULL)
 	{
-		delete chFilePath;
-		chFilePath = NULL;
+		delete chTmp;
+		chTmp = NULL;
 	}
 }
 

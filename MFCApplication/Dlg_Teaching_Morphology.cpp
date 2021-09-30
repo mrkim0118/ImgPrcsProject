@@ -205,6 +205,7 @@ void CDlg_Teaching_Morphology::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 		}
 
 		UpdateData(FALSE);
+		m_pDlgExpansionView->RefreshView(*m_ViewData_Dst.img);
 	}
 
 	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
@@ -254,6 +255,7 @@ void CDlg_Teaching_Morphology::UpdateTestImg()
 LRESULT CDlg_Teaching_Morphology::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
 	m_ViewData_Src.img = (Mat*)lParam;
+	*m_ViewData_Dst.img = m_ViewData_Src.img->clone();
 	DrawViewData(m_ViewData_Src);
 
 	return 0;
@@ -317,9 +319,8 @@ void CDlg_Teaching_Morphology::OnRButtonDown(UINT nFlags, CPoint point)
 	{
 		*m_pMessageImg = m_ViewData_Dst.img->clone();
 		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
-
-	m_pDlgExpansionView->ShowWindow(SW_SHOW);
 
 
 	__super::OnRButtonDown(nFlags, point);

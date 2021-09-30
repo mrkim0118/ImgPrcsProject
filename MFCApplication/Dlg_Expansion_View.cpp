@@ -73,5 +73,5 @@ void CDlg_Expansion_View::RefreshView(Mat img)
 	m_ViewData_Src.img = &img;
 	DrawViewData(m_ViewData_Src);
 
-	this->ShowWindow(SW_SHOW);
+
 }

@@ -71,7 +71,7 @@ void CDlg_Teaching_Brightness::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 	{
 		UpdateData(TRUE);
 
-		m_fEdit_Value_Contrast = (m_Slider_Contrast.GetPos() - 100) / 10;
+		m_fEdit_Value_Contrast = (float)(m_Slider_Contrast.GetPos() - 100) / 10;
 
 		if (m_ViewData_Src.img->empty() != TRUE)
 		{
@@ -80,6 +80,7 @@ void CDlg_Teaching_Brightness::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 
 		UpdateData(FALSE);
 	}
+	m_pDlgExpansionView->RefreshView(*m_ViewData_Dst.img);
 
 	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
 }
@@ -117,7 +118,7 @@ BOOL CDlg_Teaching_Brightness::OnInitDialog()
 	m_Slider_Brightness.SetPageSize(10);
 
 	m_Slider_Contrast.SetRange(0, 200);
-	m_Slider_Contrast.SetPos((m_fEdit_Value_Contrast+100));
+	m_Slider_Contrast.SetPos((int)(m_fEdit_Value_Contrast+100));
 	m_Slider_Contrast.SetLineSize(10);
 	m_Slider_Contrast.SetPageSize(10);
 
@@ -158,12 +159,12 @@ void CDlg_Teaching_Brightness::OnEnChangeEditContrastVal()
 	UpdateData(TRUE);
 
 	if (m_fEdit_Value_Contrast < iMin)
-		m_fEdit_Value_Contrast = iMin;
+		m_fEdit_Value_Contrast = (float)iMin;
 
 	else if (m_fEdit_Value_Contrast > iMax)
-		m_fEdit_Value_Contrast = iMax;
+		m_fEdit_Value_Contrast = (float)iMax;
 
-	m_Slider_Contrast.SetPos(m_fEdit_Value_Contrast);
+	m_Slider_Contrast.SetPos((int)m_fEdit_Value_Contrast);
 
 	if (m_ViewData_Src.img != NULL)
 	{
@@ -176,6 +177,7 @@ void CDlg_Teaching_Brightness::OnEnChangeEditContrastVal()
 LRESULT CDlg_Teaching_Brightness::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
 	m_ViewData_Src.img = (Mat*)lParam;
+	*m_ViewData_Dst.img = m_ViewData_Src.img->clone();
 	DrawViewData(m_ViewData_Src);
 
 	return 0;
@@ -221,9 +223,8 @@ void CDlg_Teaching_Brightness::OnRButtonDown(UINT nFlags, CPoint point)
 	{
 		*m_pMessageImg = m_ViewData_Dst.img->clone();
 		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
-
-	m_pDlgExpansionView->ShowWindow(SW_SHOW);
 
 
 	__super::OnRButtonDown(nFlags, point);

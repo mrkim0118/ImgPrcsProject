@@ -169,19 +169,19 @@ void CDlg_ImgPrcs::OnDrawROI(CDlgItem::ViewData& viewdata)
 BEGIN_MESSAGE_MAP(CDlg_ImgPrcs, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_LOAD_IMG, &CDlg_ImgPrcs::OnBnClickedBtnLoadImg)
 	ON_COMMAND(ID_MENU_IMG_PRCS, &CDlg_ImgPrcs::OnMenuImgPrcs)
+	ON_NOTIFY(TCN_SELCHANGE, IDC_TEACHING_TAB, &CDlg_ImgPrcs::OnTcnSelchangeTeachingTab)
 	ON_BN_CLICKED(IDC_BTN_SAVE_IMG, &CDlg_ImgPrcs::OnBnClickedBtnSaveImg)
 	ON_BN_CLICKED(IDC_BTN_IMG_PRCS_START, &CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart)
-	ON_NOTIFY(TCN_SELCHANGE, IDC_TEACHING_TAB, &CDlg_ImgPrcs::OnTcnSelchangeTeachingTab)
 	ON_BN_CLICKED(IDC_BTN_DST_TO_SRC, &CDlg_ImgPrcs::OnBnClickedBtnDstToSrc)
 	ON_BN_CLICKED(IDC_BTN_DST_TO_THRESHOLD_DLG, &CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg)
-	ON_WM_PAINT()
+	ON_BN_CLICKED(IDC_BTN_CVT_GRAY, &CDlg_ImgPrcs::OnBnClickedBtnCvtGray)
 	ON_CBN_SELCHANGE(IDC_CMB_MODE, &CDlg_ImgPrcs::OnCbnSelchangeCmbMode)
+	ON_WM_PAINT()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_WM_RBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
 	ON_WM_DESTROY()
-	ON_BN_CLICKED(IDC_BTN_CVT_GRAY, &CDlg_ImgPrcs::OnBnClickedBtnCvtGray)
-	ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -243,7 +243,6 @@ BOOL CDlg_ImgPrcs::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	m_pOpenCV = make_unique<COpenCV>();
-	m_pMessageImg = new Mat;
 	InitTeachingTab();
 
 	m_pDlgExpansionView = make_unique<CDlg_Expansion_View>();
@@ -384,26 +383,31 @@ void CDlg_ImgPrcs::OnTcnSelchangeTeachingTab(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 	case CImgPrcs::_MODE_THRESHOLD_:
 	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgThreshold->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_MORPHOLOGY_:
 	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgMorphology->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_TEMPLATE_MATCH_:
 	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Model"));
 		m_pDlgTemplateMatch->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_HISTOGRAM_:
 	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgHistogram->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_BRIGHTNESS_:
 	{
+		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgBrightness->ShowWindow(SW_SHOW);
 		break;
 	}
@@ -609,14 +613,14 @@ void CDlg_ImgPrcs::OnRButtonDown(UINT nFlags, CPoint point)
 	{
 		*m_pMessageImg = m_ViewData_Dst.img->clone();
 		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
 	else if (m_DlgRect_Src.PtInRect(point))
 	{
-		*m_pMessageImg = m_ViewData_Dst.img->clone();
+		*m_pMessageImg = m_ViewData_Src.img->clone();
 		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
 
-	//m_pDlgExpansionView->DoModal();
-	m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	__super::OnRButtonDown(nFlags, point);
 }

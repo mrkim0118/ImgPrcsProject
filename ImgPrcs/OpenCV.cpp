@@ -103,7 +103,7 @@ bool COpenCV::Histogram(InputArray SrcImg , Mat& DstImg , HistogramParams &tHist
 		int iChannels[] = { 0 };
 		int idimensions = 1; // 구하려는 히스토그램의 채널 갯수
 		const int iHistSize[] = { tHistogramParams.iBinNum }; // bin의 갯수
-		float fGrayLevel[] = { tHistogramParams.iValueMin , tHistogramParams.iValueMax }; // 스케일값의 최대 최소값
+		float fGrayLevel[] = { (float)tHistogramParams.iValueMin , (float)tHistogramParams.iValueMax }; // 스케일값의 최대 최소값
 		const float* fRanges[] = { fGrayLevel };
 		Scalar Color = SCALAR_COLOR_BLACK;
 
@@ -261,7 +261,7 @@ bool COpenCV::TemplateMatching(InputArray SrcImg, Mat & DstImg, TemplateMatchPar
 		minMaxLoc(Result, 0 ,&dMax, 0 , &MaxLoc);
 		DstImg =  mSrc.clone();
 		string strResult = format("Result Max : %.3f", dMax);
-		putText(DstImg, strResult, Point(DstImg.cols*0.05, DstImg.rows*0.05), FONT_HERSHEY_DUPLEX, 1, SCALAR_COLOR_LIGHT_SKY, 2);
+		putText(DstImg, strResult, Point((int)(DstImg.cols*0.05), (int)(DstImg.rows*0.05)), FONT_HERSHEY_DUPLEX, 1, SCALAR_COLOR_LIGHT_SKY, 2);
 		rectangle(DstImg, Rect(MaxLoc.x, MaxLoc.y, tTemplateMatchParams.Model.cols, tTemplateMatchParams.Model.rows), SCALAR_COLOR_LIGHT_SKY, 2);
 	}
 	return true;
