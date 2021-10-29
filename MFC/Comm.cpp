@@ -1,18 +1,6 @@
 #include "stdafx.h"
 #include "Comm.h"
 
-// Flow control flags
-#define FC_DTRDSR       0x01   //데이터 단말기(DTR) 대기,데이터 세트(DSR) 대기를 위한 신호
-#define FC_RTSCTS       0x02
-#define FC_XONXOFF      0x04
-
-// ascii definitions
-#define ASCII_BEL       0x07
-#define ASCII_BS        0x08
-#define ASCII_LF        0x0A
-#define ASCII_CR        0x0D
-#define ASCII_XON       0x11
-#define ASCII_XOFF      0x13
 
 CComm::CComm()
 {
@@ -236,8 +224,11 @@ BOOL CComm::Serial::OpenConnection(BYTE nPort, DCBParam m_stSocketParam)
 
 	SetCommMask(m_hComm, EV_RXCHAR);
 	SetupComm(m_hComm, 4096, 4096);	// 버퍼 설정
-	PurgeComm(m_hComm, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);	// 버퍼의 모든 데이타를 지운다
-
+	if (PurgeComm(m_hComm, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR) != TRUE)// 버퍼의 모든 데이타를 지운다
+	{
+		// 통신 버퍼 초기화 실패
+		return FALSE;
+	}
 	//TIME-OUT
 	if (SetTimeouts() == FALSE)
 	{

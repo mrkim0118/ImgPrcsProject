@@ -95,30 +95,6 @@ public:
 };
 
 
-class ThreadPool
-{
-public:
-	ThreadPool(size_t num_threads);
-	virtual ~ThreadPool();
 
-	template <class F, class... Args>
-	future<typename result_of<F(Args...)>::type> EnqueueJob(F&& f, Args&&... args);
-
-private:
-	size_t num_threads_;
-	vector<thread> m_vThreads;
-	queue<function<void()>> m_qJobs;
-	condition_variable m_cv_job;
-	mutex m_mtJob;
-
-	bool m_bStop_All;
-public:
-	void WorkerThread();
-	//void EnqueueJob(function<void()> job);
-
-
-
-
-};
 
 

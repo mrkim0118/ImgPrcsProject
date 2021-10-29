@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\ImgPrcs">
+      <UniqueIdentifier>{be0b7341-8f9c-486b-99ce-54b2499be4c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\ImgPrcs">
+      <UniqueIdentifier>{461ef72d-67f6-4ba9-a235-5c051a5a35a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,28 +39,31 @@
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Dlg_Expansion_View.h">
+      <Filter>헤더 파일\ImgPrcs</Filter>
+    </ClInclude>
     <ClInclude Include="Dlg_imgPrcs.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Dlg_Teaching_Threshold.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Dlg_Teaching_Morphology.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Dlg_Teaching_Template_Match.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Dlg_Teaching_Histogram.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\ImgPrcs</Filter>
     </ClInclude>
     <ClInclude Include="Dlg_Teaching_Brightness.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\ImgPrcs</Filter>
     </ClInclude>
-    <ClInclude Include="Dlg_Expansion_View.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Dlg_Teaching_Histogram.h">
+      <Filter>헤더 파일\ImgPrcs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Teaching_Morphology.h">
+      <Filter>헤더 파일\ImgPrcs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Teaching_Template_Match.h">
+      <Filter>헤더 파일\ImgPrcs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Teaching_Threshold.h">
+      <Filter>헤더 파일\ImgPrcs</Filter>
     </ClInclude>
     <ClInclude Include="DlgItem.h">
+      <Filter>헤더 파일\ImgPrcs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Serial_Test.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,28 +77,31 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Dlg_Expansion_View.cpp">
+      <Filter>소스 파일\ImgPrcs</Filter>
+    </ClCompile>
     <ClCompile Include="Dlg_imgPrcs.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_Teaching_Threshold.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_Teaching_Morphology.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_Teaching_Template_Match.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_Teaching_Histogram.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\ImgPrcs</Filter>
     </ClCompile>
     <ClCompile Include="Dlg_Teaching_Brightness.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\ImgPrcs</Filter>
     </ClCompile>
-    <ClCompile Include="Dlg_Expansion_View.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Dlg_Teaching_Histogram.cpp">
+      <Filter>소스 파일\ImgPrcs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Teaching_Morphology.cpp">
+      <Filter>소스 파일\ImgPrcs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Teaching_Template_Match.cpp">
+      <Filter>소스 파일\ImgPrcs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Teaching_Threshold.cpp">
+      <Filter>소스 파일\ImgPrcs</Filter>
     </ClCompile>
     <ClCompile Include="DlgItem.cpp">
+      <Filter>소스 파일\ImgPrcs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Serial_Test.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

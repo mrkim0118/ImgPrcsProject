@@ -2,6 +2,52 @@
 
 #include "Etc.h"
 #include <WinSock2.h>
+
+#define COM_MAXBLOCK     4095
+#define COM_MAXPORTS        4
+
+
+// Flow control flags
+
+#define FC_DTRDSR       0x01
+#define FC_RTSCTS       0x02
+#define FC_XONXOFF      0x04
+
+// ascii definitions
+
+#define ASCII_BEL       0x07
+#define ASCII_BS        0x08
+#define ASCII_LF        0x0A
+#define ASCII_CR        0x0D
+#define ASCII_XON       0x11
+#define ASCII_XOFF      0x13
+#define ASCII_STX		0x02
+#define ASCII_ETX		0xFE
+
+/////////////////////////////////////////////////////////////////////////////
+// CComm window
+#define ZERO_MEMORY(s)	::ZeroMemory(&s, sizeof(s))
+
+// flow control
+#define FC_DTRDSR	0x01
+#define FC_RTSCTS	0x02
+#define FC_XONXOFF	0x04
+#define	FC_NONE		0x00
+
+#define ASCII_XON	0x11
+#define ASCII_XOFF	0x13
+
+// registry stuff
+#define CS_REGKEY_SETTINGS     _T("통신환경")
+#define CS_REGENTRY_PORT       _T("PORT")
+#define CS_REGENTRY_PARITY     _T("PARITY")
+#define CS_REGENTRY_BAUD       _T("BAUD")
+#define CS_REGENTRY_DATABITS   _T("DATABITS")
+#define CS_REGENTRY_STOPBITS   _T("STOPBITS")
+#define CS_REGENTRY_FLOW       _T("FLOW")
+
+#pragma  pack(push,1)
+
 class CComm
 {
 public:
@@ -10,10 +56,12 @@ public:
 
 	class Serial
 	{
+
 	public:
 		Serial(void);
 		~Serial(void);
 	private:
+
 		HANDLE m_hComm;			//Handle of COM Port
 		OVERLAPPED  m_osWrite, m_osRead;	// Overlapped I/O를 위한 구조체
 		BOOL m_bFlowCtrl;
@@ -21,9 +69,12 @@ public:
 		struct DCBParam
 		{
 			DWORD dwBaudrate = CBR_19200;
-			BYTE nSize = 8;
+			BYTE nByteSize = 8;
 			BYTE nParity = NOPARITY;
 			BYTE nStopBit = ONESTOPBIT;
+			BYTE nFlowCtrl;
+			BYTE nXonXoff;
+			BYTE nCommPort;
 		};
 		DCBParam m_stSocketParam;
 	public:

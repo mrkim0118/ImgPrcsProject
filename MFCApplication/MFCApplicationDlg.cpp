@@ -70,6 +70,7 @@ BEGIN_MESSAGE_MAP(CMFCApplicationDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_MENU_IMG_PRCS, &CMFCApplicationDlg::OnMenuImgPrcs)
+	ON_COMMAND(ID_MENU_SERIAL_COMM, &CMFCApplicationDlg::OnMenuSerialComm)
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
@@ -174,6 +175,11 @@ void CMFCApplicationDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 }
 
 void CMFCApplicationDlg::OnMenuImgPrcs()
+{
+	m_pDlg_ImgPrcs->DoModal();
+}
+
+void CMFCApplicationDlg::OnMenuSerialComm()
 {
 	m_pDlg_ImgPrcs->DoModal();
 }

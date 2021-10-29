@@ -46,6 +46,7 @@ protected:
 public:
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
 	afx_msg void OnMenuImgPrcs();
+	afx_msg void OnMenuSerialComm();
 	afx_msg void OnDestroy();
 
 public:
