@@ -224,6 +224,7 @@ BOOL CComm::Serial::OpenConnection(BYTE nPort, DCBParam m_stSocketParam)
 
 	SetCommMask(m_hComm, EV_RXCHAR);
 	SetupComm(m_hComm, 4096, 4096);	// 버퍼 설정
+
 	if (PurgeComm(m_hComm, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR) != TRUE)// 버퍼의 모든 데이타를 지운다
 	{
 		// 통신 버퍼 초기화 실패
