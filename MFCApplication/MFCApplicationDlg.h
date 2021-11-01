@@ -2,6 +2,7 @@
 // MFCApplicationDlg.h : 헤더 파일
 //
 #include "Dlg_ImgPrcs.h"
+#include "Dlg_Serial_Test.h"
 
 #pragma once
 #define SFC_GETSET(ret, fname, var)\
@@ -32,6 +33,7 @@ protected:
 private:
 	CEtc         *m_pEtc;
 	CDlg_ImgPrcs *m_pDlg_ImgPrcs;
+	CDlg_Serial_Test *m_Dlg_Serial;
 
 // 구현입니다.
 protected:

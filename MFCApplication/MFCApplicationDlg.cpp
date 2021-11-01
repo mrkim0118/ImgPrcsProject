@@ -109,6 +109,8 @@ BOOL CMFCApplicationDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	m_pDlg_ImgPrcs = new CDlg_ImgPrcs;
 
+	m_Dlg_Serial = new CDlg_Serial_Test;
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -181,7 +183,7 @@ void CMFCApplicationDlg::OnMenuImgPrcs()
 
 void CMFCApplicationDlg::OnMenuSerialComm()
 {
-	m_pDlg_ImgPrcs->DoModal();
+	m_Dlg_Serial->DoModal();
 }
 
 
@@ -193,6 +195,11 @@ void CMFCApplicationDlg::OnDestroy()
 	{
 		delete m_pDlg_ImgPrcs;
 		m_pDlg_ImgPrcs = NULL;
+	}
+	if (m_Dlg_Serial != NULL)
+	{
+		delete m_Dlg_Serial;
+		m_Dlg_Serial = NULL;
 	}
 }
 

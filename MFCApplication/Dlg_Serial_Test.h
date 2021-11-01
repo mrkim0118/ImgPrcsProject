@@ -1,7 +1,11 @@
 #pragma once
 
 #include "../MFC/Comm.h"
+#include "afxwin.h"
 // CDlg_Serial_Test 대화 상자입니다.
+
+#define COMORT_MAX = 20;
+
 
 class CDlg_Serial_Test : public CDialogEx
 {
@@ -23,8 +27,24 @@ protected:
 
 private:
 	CComm::Serial m_Serial;
+	int m_iComport;
+	int m_iBaudrate;
+	int m_iParity;
+	int m_iStopbit;
 public:
+
 	afx_msg void OnBnClickedBtnSerialSendData();
 	afx_msg void OnBnClickedBtnSerialOpen();
 	afx_msg void OnBnClickedBtnSerialClose();
+	CComboBox m_Cmb_Comport;
+	CComboBox m_Cmb_Baudrate;
+	CComboBox m_Cmb_Parity;
+	afx_msg void OnCbnSelchangeCmbStopBit();
+	CComboBox m_Cmb_StopBit;
+	virtual BOOL OnInitDialog();
+
+	int GetComport();
+	int GetBaudrate();
+	int GetStopBit();
+	int GetParity();
 };

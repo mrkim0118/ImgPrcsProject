@@ -188,7 +188,7 @@ CComm::Serial::Serial(void)
 	m_bConnect = FALSE;
 	m_bFlowCtrl = FC_XONXOFF;
 	m_stSocketParam.dwBaudrate = CBR_19200;
-	m_stSocketParam.nSize = 8;
+	m_stSocketParam.nByteSize = 8;
 	m_stSocketParam.nParity = NOPARITY;
 	m_stSocketParam.nStopBit = ONESTOPBIT;
 	m_osRead.Offset = 0;
@@ -287,7 +287,7 @@ BOOL CComm::Serial::SetDCB(DCBParam m_stSocketParam)
 	}
 
 	dcb.BaudRate = m_stSocketParam.dwBaudrate;
-	dcb.ByteSize = m_stSocketParam.nSize;
+	dcb.ByteSize = m_stSocketParam.nByteSize;
 	dcb.Parity = m_stSocketParam.nParity;
 	dcb.StopBits = m_stSocketParam.nStopBit;
 
@@ -339,8 +339,10 @@ int CComm::Serial::ReadCommPort(unsigned char *message, DWORD length)
 	DWORD dwErrorFlags;
 	DWORD dwLength; 
 	DWORD dwReadLength = 0; 
+
 	CStringA strTemp; 
 	strTemp.Format("%s", message); 
+
 	if (m_bConnect == FALSE)
 	{
 		return 0;
