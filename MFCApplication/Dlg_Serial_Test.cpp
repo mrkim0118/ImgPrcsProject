@@ -35,7 +35,6 @@ BEGIN_MESSAGE_MAP(CDlg_Serial_Test, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_SERIAL_SEND_DATA, &CDlg_Serial_Test::OnBnClickedBtnSerialSendData)
 	ON_BN_CLICKED(IDC_BTN_SERIAL_OPEN, &CDlg_Serial_Test::OnBnClickedBtnSerialOpen)
 	ON_BN_CLICKED(IDC_BTN_SERIAL_CLOSE, &CDlg_Serial_Test::OnBnClickedBtnSerialClose)
-	ON_CBN_SELCHANGE(IDC_CMB_STOP_BIT, &CDlg_Serial_Test::OnCbnSelchangeCmbStopBit)
 END_MESSAGE_MAP()
 
 
@@ -50,19 +49,18 @@ void CDlg_Serial_Test::OnBnClickedBtnSerialSendData()
 
 void CDlg_Serial_Test::OnBnClickedBtnSerialOpen()
 {
-//	m_Serial.OpenConnection()
+	m_DCBparam.dwBaudrate = GetBaudrate();
+	m_DCBparam.nCommPort = GetComport();
+	m_DCBparam.nParity = GetParity();
+	m_DCBparam.nStopBit = GetStopBit();
+
+	m_Serial.OpenConnection(m_DCBparam);
 }
 
 
 void CDlg_Serial_Test::OnBnClickedBtnSerialClose()
 {
-	
-}
-
-
-void CDlg_Serial_Test::OnCbnSelchangeCmbStopBit()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	m_Serial.CloseConnection();
 }
 
 

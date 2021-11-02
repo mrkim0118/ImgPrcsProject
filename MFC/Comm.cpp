@@ -202,7 +202,7 @@ CComm::Serial::~Serial(void)
 {
 }
 
-BOOL CComm::Serial::OpenConnection(BYTE nPort, DCBParam m_stSocketParam)
+BOOL CComm::Serial::OpenConnection(DCBParam m_stSocketParam)
 {
 	//이미 통신이 연결되어 있다면 통신 연결 해제 후 진행
 	if (m_hComm != NULL)
@@ -212,8 +212,9 @@ BOOL CComm::Serial::OpenConnection(BYTE nPort, DCBParam m_stSocketParam)
 	//char			szPort[15];
 	//wsprintf(szPort, _T("\\\\.\\COM%d"), nPort);
 	//strcat(temp, port_name);
+
 	CString strPort = _T("");
-	strPort.Format(_T("\\\\.\\COM%d"), nPort);
+	strPort.Format(_T("\\\\.\\COM%d"), m_stSocketParam.nCommPort);
 	m_hComm = CreateFile(strPort, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
 	
 	if(m_hComm == INVALID_HANDLE_VALUE)

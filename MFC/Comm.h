@@ -60,12 +60,8 @@ public:
 	public:
 		Serial(void);
 		~Serial(void);
-	private:
-
-		HANDLE m_hComm;			//Handle of COM Port
-		OVERLAPPED  m_osWrite, m_osRead;	// Overlapped I/O를 위한 구조체
-		BOOL m_bFlowCtrl;
-		BOOL m_bConnect;
+	
+	public:
 		struct DCBParam
 		{
 			DWORD dwBaudrate = CBR_19200;
@@ -77,8 +73,15 @@ public:
 			BYTE nCommPort;
 		};
 		DCBParam m_stSocketParam;
+	private:
+
+		HANDLE m_hComm;			//Handle of COM Port
+		OVERLAPPED  m_osWrite, m_osRead;	// Overlapped I/O를 위한 구조체
+		BOOL m_bFlowCtrl;
+		BOOL m_bConnect;
+
 	public:
-		BOOL OpenConnection(BYTE nPort, DCBParam m_stSocketParam);
+		BOOL OpenConnection(DCBParam m_stSocketParam);
 		void CloseConnection();
 		BOOL SetDCB(DCBParam m_stSocketParam);
 		BOOL SetTimeouts();

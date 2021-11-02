@@ -24,7 +24,8 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
-
+public:
+	CComm::Serial::DCBParam m_DCBparam;
 private:
 	CComm::Serial m_Serial;
 	int m_iComport;
@@ -39,7 +40,6 @@ public:
 	CComboBox m_Cmb_Comport;
 	CComboBox m_Cmb_Baudrate;
 	CComboBox m_Cmb_Parity;
-	afx_msg void OnCbnSelchangeCmbStopBit();
 	CComboBox m_Cmb_StopBit;
 	virtual BOOL OnInitDialog();
 
