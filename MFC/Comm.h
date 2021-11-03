@@ -79,15 +79,25 @@ public:
 		OVERLAPPED  m_osWrite, m_osRead;	// Overlapped I/O를 위한 구조체
 		BOOL m_bFlowCtrl;
 		BOOL m_bConnect;
+		BOOL m_bPortOpen;
+		DWORD dwThreadID;
 
 	public:
 		BOOL OpenConnection(DCBParam m_stSocketParam);
 		void CloseConnection();
 		BOOL SetDCB(DCBParam m_stSocketParam);
 		BOOL SetTimeouts();
+		DWORD WINAPI ComReadProcess(void *arg);
+
+		char MakeCRC(char* SendBuff, int SendSize);
 
 		int WriteCommPort(unsigned char *Message, DWORD dwLength);
 		int ReadCommPort(unsigned char *Message, DWORD dwLength);
+
+		BOOL GetPortOpen();
+		CString ReceiveData(char* buff, DWORD dwReadAll);
+
+		
 
 	};
 

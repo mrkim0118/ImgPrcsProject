@@ -2,6 +2,7 @@
 
 #include "../MFC/Comm.h"
 #include "afxwin.h"
+#include "afxcmn.h"
 // CDlg_Serial_Test 대화 상자입니다.
 
 #define COMORT_MAX = 20;
@@ -32,6 +33,7 @@ private:
 	int m_iBaudrate;
 	int m_iParity;
 	int m_iStopbit;
+	CString m_strSendData;
 public:
 
 	afx_msg void OnBnClickedBtnSerialSendData();
@@ -47,4 +49,6 @@ public:
 	int GetBaudrate();
 	int GetStopBit();
 	int GetParity();
+
+	CListBox m_List_ReceiveData;
 };

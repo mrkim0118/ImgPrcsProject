@@ -28,6 +28,7 @@ void CDlg_Serial_Test::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CMB_BAUDRATE, m_Cmb_Baudrate);
 	DDX_Control(pDX, IDC_CMB_PARITY_BIT, m_Cmb_Parity);
 	DDX_Control(pDX, IDC_CMB_STOP_BIT, m_Cmb_StopBit);
+	DDX_Control(pDX, IDC_LIST_DATA, m_List_ReceiveData);
 }
 
 
@@ -43,7 +44,32 @@ END_MESSAGE_MAP()
 
 void CDlg_Serial_Test::OnBnClickedBtnSerialSendData()
 {
+	UpdateData(TRUE);
 
+	char Buff[256];
+	char SendBuff[256];
+	int SendSize = 0;
+
+	DWORD dwWritten;
+
+	memset(Buff, 0, sizeof(Buff));
+	memset(SendBuff, 0, sizeof(SendBuff));
+
+	BOOL bPortOpen = m_Serial.GetPortOpen();
+	if(bPortOpen)
+	{
+		SendSize = m_strSendData.GetLength();
+		memcpy(Buff, m_strSendData.GetBuffer(0), SendSize);
+
+		SendBuff[0] = ASCII_STX;
+		memcpy(SendBuff + 1, Buff, SendSize);
+		SendSize++;
+
+		SendBuff[SendSize++] = ASCII_ETX;
+		SendBuff[SendSize++] = m_Serial.MakeCRC(SendBuff, SendSize);
+
+
+	}
 }
 
 

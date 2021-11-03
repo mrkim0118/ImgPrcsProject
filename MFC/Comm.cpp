@@ -208,14 +208,9 @@ BOOL CComm::Serial::OpenConnection(DCBParam m_stSocketParam)
 	if (m_hComm != NULL)
 		CloseConnection();
 
-	//드라이버 핸들 생성
-	//char			szPort[15];
-	//wsprintf(szPort, _T("\\\\.\\COM%d"), nPort);
-	//strcat(temp, port_name);
-
 	CString strPort = _T("");
 	strPort.Format(_T("\\\\.\\COM%d"), m_stSocketParam.nCommPort);
-	m_hComm = CreateFile(strPort, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
+	m_hComm = CreateFile(strPort, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL , NULL);
 	
 	if(m_hComm == INVALID_HANDLE_VALUE)
 	{
@@ -247,9 +242,12 @@ BOOL CComm::Serial::OpenConnection(DCBParam m_stSocketParam)
 		CloseHandle(m_hComm);
 		return FALSE;
 	}
+	m_bPortOpen = TRUE;
 
-	m_osRead.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-	m_osWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	//CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ComReadProcess, this, 0, &dwThreadID);
+
+	//m_osRead.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+	//m_osWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
 
 	return TRUE;
@@ -257,6 +255,11 @@ BOOL CComm::Serial::OpenConnection(DCBParam m_stSocketParam)
 
 void CComm::Serial::CloseConnection(void)
 {
+
+	m_bPortOpen = FALSE;
+	SetCommMask(m_hComm, 0);
+	PurgeComm(m_hComm, PURGE_TXABORT | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_RXCLEAR);
+
 	if (m_hComm != NULL)
 	{
 		CloseHandle(m_hComm);
@@ -334,6 +337,53 @@ BOOL CComm::Serial::SetTimeouts(void)
 	CommTimeOuts.WriteTotalTimeoutConstant = 1000;
 	return (SetCommTimeouts(m_hComm, &CommTimeOuts) != 0);	//C4800 해결
 }
+DWORD WINAPI CComm::Serial::ComReadProcess(void *arg)
+{
+	DWORD dwEvent;
+	char buff[2048];
+	DWORD dwRead;
+	DWORD dwReadAll;
+
+	if (!SetCommMask(m_hComm, EV_RXCHAR))
+	{
+		return FALSE;
+	}
+	// 포트가 연결되어 있는 동안 무한 루트
+	while (m_bPortOpen)
+	{
+		dwEvent = 0;
+		WaitCommEvent(m_hComm, &dwEvent, NULL);
+		// Serial 포트에 읽을 데이터가 있을 때까지 대기
+		Sleep(50);
+		if ((dwEvent & EV_RXCHAR) == EV_RXCHAR)
+		{
+			dwReadAll = 0;
+			do // 버퍼에 데이터가 없을 때까지 읽기
+			{
+				ReadFile(m_hComm, buff, 2048 - dwReadAll, &dwRead, NULL); // 데이터를 읽어 옴
+				dwReadAll += dwRead;
+			} while (dwRead);
+		}
+		// 읽어 온 데이터를 ReceiveData로 보내서 처리
+		ReceiveData(buff, dwReadAll);	}
+
+	return TRUE;
+}
+
+char CComm::Serial::MakeCRC(char * SendBuff, int BuffSize)
+{
+	char CRC;
+	short i = 0;
+
+	CRC = *(SendBuff);
+
+	for (i = 1; i < BuffSize; i++)
+	{
+		CRC ^= *(SendBuff + i);
+	}
+	return CRC;
+}
+
 int CComm::Serial::ReadCommPort(unsigned char *message, DWORD length) 
 { 
 	COMSTAT ComStat; 
@@ -356,7 +406,8 @@ int CComm::Serial::ReadCommPort(unsigned char *message, DWORD length)
 	} 
 	if (dwReadLength == 0)
 	{
-		CStringA str; str.Format("%s", message); 
+		CStringA str; 
+		str.Format("%s", message); 
 		if (strTemp != str) 
 		{ 
 			return str.GetLength();
@@ -365,9 +416,32 @@ int CComm::Serial::ReadCommPort(unsigned char *message, DWORD length)
 	return dwReadLength; 
 }
 
+BOOL CComm::Serial::GetPortOpen()
+{
+	return m_bPortOpen;
+}
+
 int CComm::Serial::WriteCommPort(unsigned char *message, DWORD dwLength) 
 { 
 	int iRet; 
 	iRet = WriteFile(m_hComm, message, dwLength, &dwLength, &m_osWrite);
 	return iRet; 
+}
+
+CString CComm::Serial::ReceiveData(char * buff, DWORD dwReadAll)
+{
+	CString strText;
+	char ReceiveData[256];
+
+	memset(ReceiveData, 0, sizeof(ReceiveData));
+
+	if (MakeCRC(buff, dwReadAll - 1) != buff[dwReadAll - 1])
+	{
+		return FALSE;
+	}
+	memcpy(ReceiveData, buff + 1, dwReadAll - 3);
+	strText.Format(_T("%s"), ReceiveData);
+	//m_List_ReceiveData.AddString(strText);
+
+	return strText;
 }
