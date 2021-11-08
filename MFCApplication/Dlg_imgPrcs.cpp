@@ -173,7 +173,7 @@ BEGIN_MESSAGE_MAP(CDlg_ImgPrcs, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_SAVE_IMG, &CDlg_ImgPrcs::OnBnClickedBtnSaveImg)
 	ON_BN_CLICKED(IDC_BTN_IMG_PRCS_START, &CDlg_ImgPrcs::OnBnClickedBtnImgPrcsStart)
 	ON_BN_CLICKED(IDC_BTN_DST_TO_SRC, &CDlg_ImgPrcs::OnBnClickedBtnDstToSrc)
-	ON_BN_CLICKED(IDC_BTN_DST_TO_THRESHOLD_DLG, &CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg)
+	ON_BN_CLICKED(IDC_BTN_DST_TO_THRESHOLD_DLG, &CDlg_ImgPrcs::OnBnClickedBtnSrcToTeachingDlg)
 	ON_BN_CLICKED(IDC_BTN_CVT_GRAY, &CDlg_ImgPrcs::OnBnClickedBtnCvtGray)
 	ON_CBN_SELCHANGE(IDC_CMB_MODE, &CDlg_ImgPrcs::OnCbnSelchangeCmbMode)
 	ON_WM_PAINT()
@@ -383,31 +383,31 @@ void CDlg_ImgPrcs::OnTcnSelchangeTeachingTab(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 	case CImgPrcs::_MODE_THRESHOLD_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgThreshold->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_MORPHOLOGY_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgMorphology->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_TEMPLATE_MATCH_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Model"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Model"));
 		m_pDlgTemplateMatch->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_HISTOGRAM_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgHistogram->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_BRIGHTNESS_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgBrightness->ShowWindow(SW_SHOW);
 		break;
 	}
@@ -427,7 +427,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnDstToSrc()
 }
 
 
-void CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg()
+void CDlg_ImgPrcs::OnBnClickedBtnSrcToTeachingDlg()
 {
 	m_iInspMode = GetInspMode();
 
@@ -455,7 +455,8 @@ void CDlg_ImgPrcs::OnBnClickedBtnDstToTeachingDlg()
 	{
 		if (m_pDlgTemplateMatch != NULL)
 		{
-			m_pDlgTemplateMatch->CreateModelImg(*m_ViewData_Src.img, *m_pMessageImg, m_ptROI_Start, m_ptROI_End, m_ViewData_Src.rect);
+			Mat Src = m_ViewData_Src.img->clone();
+			m_pDlgTemplateMatch->CreateModelImg(Src, *m_pMessageImg, m_ptROI_Start, m_ptROI_End, m_ViewData_Src.rect);
 			::SendMessage(m_pDlgTemplateMatch->GetSafeHwnd(), WM_TEMPLATE_MATCH_MODEL, NULL, (LPARAM)m_pMessageImg);
 		}
 		break;
@@ -499,31 +500,31 @@ void CDlg_ImgPrcs::OnCbnSelchangeCmbMode()
 	{
 	case CImgPrcs::_MODE_THRESHOLD_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgThreshold->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_MORPHOLOGY_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgMorphology->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_TEMPLATE_MATCH_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Model"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Model"));
 		m_pDlgTemplateMatch->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_HISTOGRAM_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgHistogram->ShowWindow(SW_SHOW);
 		break;
 	}
 	case CImgPrcs::_MODE_BRIGHTNESS_:
 	{
-		SetDlgItemText(IDC_BTN_DST_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
+		SetDlgItemText(IDC_BTN_SRC_TO_TEACHING_DLG, _T("Src to Teaching Dlg"));
 		m_pDlgBrightness->ShowWindow(SW_SHOW);
 		break;
 	}
@@ -612,15 +613,13 @@ void CDlg_ImgPrcs::OnRButtonDown(UINT nFlags, CPoint point)
 	if (m_DlgRect_Dst.PtInRect(point))
 	{
 		*m_pMessageImg = m_ViewData_Dst.img->clone();
-		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
-		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
 	else if (m_DlgRect_Src.PtInRect(point))
 	{
 		*m_pMessageImg = m_ViewData_Src.img->clone();
-		m_pDlgExpansionView->RefreshView(*m_pMessageImg);
-		m_pDlgExpansionView->ShowWindow(SW_SHOW);
 	}
+	m_pDlgExpansionView->RefreshView(*m_pMessageImg);
+	m_pDlgExpansionView->ShowWindow(SW_SHOW);
 
 	__super::OnRButtonDown(nFlags, point);
 }

@@ -138,15 +138,28 @@ void CDlgItem::InitViewData(CWnd* pWnd, CWnd* pWnd_Ext /*= NULL*/)
 
 void CDlgItem::ReleaseViewData()
 {
-	delete this->m_ViewData_Src.BitMapInfo;
-	delete this->m_ViewData_Dst.BitMapInfo;
-	delete this->m_ViewData_Src.img;
-	delete this->m_ViewData_Dst.img;
-	delete this->m_ViewData_Src.ScreenImg;
-	delete this->m_ViewData_Dst.ScreenImg;
-	delete this->m_ViewData_Src.dc;
-	delete this->m_ViewData_Dst.dc;
-	delete this->m_pMessageImg;
+	delete m_ViewData_Src.BitMapInfo;
+	delete m_ViewData_Dst.BitMapInfo;
+	delete m_ViewData_Src.ScreenImg;
+	delete m_ViewData_Dst.ScreenImg;
+	delete m_ViewData_Src.dc;
+	delete m_ViewData_Dst.dc;
+
+	if (m_ViewData_Src.img != NULL)
+	{
+		delete m_ViewData_Src.img;
+		m_ViewData_Src.img = NULL;
+	}
+	if (m_ViewData_Dst.img != NULL)
+	{
+		delete m_ViewData_Dst.img;
+		m_ViewData_Dst.img = NULL;
+	}
+	//if (m_pMessageImg != NULL)
+	//{
+	//	delete m_pMessageImg;
+	//	m_pMessageImg = NULL;
+	//}
 }
 
 void CDlgItem::DrawViewData(ViewData & View)

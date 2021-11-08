@@ -122,17 +122,17 @@ bool COpenCV::Histogram(InputArray SrcImg , Mat& DstImg , HistogramParams &tHist
 			Mat BGR_Hist[3];
 			for (int i = 0; i < iChannelCnt; i++)
 			{
-				if (i == _COLOR_B_)
+				if (i == _SCALAR_B_)
 				{
 					Color = SCALAR_COLOR_BLUE;
 					iChannels[0] = i;
 				}
-				else if (i == _COLOR_G_)
+				else if (i == _SCALAR_G_)
 				{
 					Color = SCALAR_COLOR_GREEN;
 					iChannels[0] = i;
 				}
-				else if (i == _COLOR_R_)
+				else if (i == _SCALAR_R_)
 				{
 					Color = SCALAR_COLOR_RED;
 					iChannels[0] = i;
@@ -284,9 +284,9 @@ bool COpenCV::Brightness(InputArray SrcImg, Mat & DstImg, BrightnessParams tBrig
 				}
 				else if (mSrc.channels() == 3)
 				{
-					Dst.at<uchar>(j, (i * 3 + 0)) = saturate_cast<uchar>(mSrc.at<uchar>(j, (i * 3 + 0)) + tBrightnessParams.iBrightness);
-					Dst.at<uchar>(j, (i * 3 + 1)) = saturate_cast<uchar>(mSrc.at<uchar>(j, (i * 3 + 1)) + tBrightnessParams.iBrightness);
-					Dst.at<uchar>(j, (i * 3 + 2)) = saturate_cast<uchar>(mSrc.at<uchar>(j, (i * 3 + 2)) + tBrightnessParams.iBrightness);
+					Dst.at<uchar>(j, (i * mSrc.channels() + _RGB_R_)) = saturate_cast<uchar>(mSrc.at<uchar>(j, (i * mSrc.channels() + _RGB_R_)) + tBrightnessParams.iBrightness);
+					Dst.at<uchar>(j, (i * mSrc.channels() + _RGB_G_)) = saturate_cast<uchar>(mSrc.at<uchar>(j, (i * mSrc.channels() + _RGB_G_)) + tBrightnessParams.iBrightness);
+					Dst.at<uchar>(j, (i * mSrc.channels() + _RGB_B_)) = saturate_cast<uchar>(mSrc.at<uchar>(j, (i * mSrc.channels() + _RGB_B_)) + tBrightnessParams.iBrightness);
 				}
 			}	
 		} 
@@ -300,9 +300,10 @@ bool COpenCV::Brightness(InputArray SrcImg, Mat & DstImg, BrightnessParams tBrig
 bool COpenCV::Contrast(InputArray SrcImg, Mat & DstImg, float fValue)
 {
 	Mat mSrc = SrcImg.getMat();
+
 	if (CheckImg(mSrc) == true)
 	{
-		DstImg = mSrc + ((mSrc - 128) * fValue);
+		DstImg = mSrc + ((mSrc - GRAYSCALE_HALF) * fValue);
 	}
 	return true;
 }

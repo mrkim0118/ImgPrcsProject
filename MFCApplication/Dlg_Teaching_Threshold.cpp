@@ -23,6 +23,7 @@ CDlg_Teaching_Threshold::CDlg_Teaching_Threshold(CWnd* pParent /*=NULL*/)
 
 CDlg_Teaching_Threshold::~CDlg_Teaching_Threshold()
 {
+
 }
 
 void CDlg_Teaching_Threshold::DoDataExchange(CDataExchange* pDX)

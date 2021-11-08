@@ -20,6 +20,9 @@ typedef vector<vector<Point>> ContoursType;
 #define SCALAR_COLOR_YELLOW Scalar(0,255,255)
 #define SCALAR_COLOR_LIGHT_SKY Scalar(234,255,18)
 
+#define GRAYSCALE_MAX 256
+#define GRAYSCALE_HALF 128
+
 class COpenCV
 {
 public:
@@ -30,12 +33,18 @@ private:
 	CEtc  m_Etc;
 
 public:
-	enum ColorOrder
+	enum ScalarOrder
 	{
-		_COLOR_G_ = 0,
-		_COLOR_B_,
-		_COLOR_R_,
-		_COLOR_COUNT_MAX
+		_SCALAR_G_ = 0,
+		_SCALAR_B_,
+		_SCALAR_R_,
+
+	};
+	enum RGBOrder
+	{
+		_RGB_R_ = 0,
+		_RGB_G_,
+		_RGB_B_,
 	};
 	struct ThresHoldParams
 	{

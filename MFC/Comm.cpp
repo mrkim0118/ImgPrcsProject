@@ -365,7 +365,8 @@ DWORD WINAPI CComm::Serial::ComReadProcess(void *arg)
 			} while (dwRead);
 		}
 		// 읽어 온 데이터를 ReceiveData로 보내서 처리
-		ReceiveData(buff, dwReadAll);	}
+		ReceiveData(buff, dwReadAll);
+	}
 
 	return TRUE;
 }

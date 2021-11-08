@@ -71,7 +71,7 @@ public:
 	afx_msg void OnBnClickedBtnImgPrcsStart();
 	afx_msg void OnTcnSelchangeTeachingTab(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnBnClickedBtnDstToSrc();
-	afx_msg void OnBnClickedBtnDstToTeachingDlg();
+	afx_msg void OnBnClickedBtnSrcToTeachingDlg();
 	afx_msg void OnPaint();
 	afx_msg void OnCbnSelchangeCmbMode();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
