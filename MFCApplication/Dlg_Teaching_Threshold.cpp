@@ -8,7 +8,7 @@
 
 
 // CDlg_Teaching_Threshold 대화 상자입니다.
-
+CDlg_Teaching_Threshold* CDlg_Teaching_Threshold::m_pDlgThreshold = NULL;
 IMPLEMENT_DYNAMIC(CDlg_Teaching_Threshold, CDialogEx)
 
 CDlg_Teaching_Threshold::CDlg_Teaching_Threshold(CWnd* pParent /*=NULL*/)
@@ -58,6 +58,24 @@ END_MESSAGE_MAP()
 
 // CDlg_Teaching_Threshold 메시지 처리기입니다.
 
+
+CDlg_Teaching_Threshold * CDlg_Teaching_Threshold::GetInstance()
+{
+	if (m_pDlgThreshold == NULL)
+	{
+		m_pDlgThreshold = new CDlg_Teaching_Threshold;
+	}
+	return m_pDlgThreshold;
+}
+
+void CDlg_Teaching_Threshold::DestroyInstance()
+{
+	if (m_pDlgThreshold != NULL)
+	{
+		delete m_pDlgThreshold;
+		m_pDlgThreshold = NULL;
+	}
+}
 
 BOOL CDlg_Teaching_Threshold::OnInitDialog()
 {

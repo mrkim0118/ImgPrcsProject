@@ -136,7 +136,7 @@ public:
 	bool Brightness(InputArray SrcImg, Mat& DstImg, BrightnessParams tBrightnessParams);
 	bool Contrast(InputArray SrcImg, Mat& DstImg, float fValue);
 	void GetHistogramImg(Mat & Img, Mat &imgHist , Scalar Color , HistogramParams &tHistogramParams);
-
+	void CreateROIImg(Mat SrcImg, Mat& DstImg, CPoint ptStart, CPoint ptEnd, CRect rect);
 	ContoursType Contour(InputArray SrcImg, Mat& DstImg, ContourParams tContourParams);
 
 };

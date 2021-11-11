@@ -359,3 +359,46 @@ ContoursType COpenCV::Contour(InputArray SrcImg, Mat& DstImg, ContourParams tCon
 
 	return Contours;
 }
+
+
+void COpenCV::CreateROIImg(Mat SrcImg, Mat& DstImg, CPoint ptStart, CPoint ptEnd, CRect rect)
+{
+	int iPoint_Left, iPoint_Right, iPoint_Top, iPoint_Bottom;
+
+	if (ptStart.x > ptEnd.x)
+	{
+		iPoint_Left = ptEnd.x;
+		iPoint_Right = ptStart.x;
+	}
+	else
+	{
+		iPoint_Left = ptStart.x;
+		iPoint_Right = ptEnd.x;
+	}
+
+	if (ptStart.y > ptEnd.y)
+	{
+		iPoint_Top = ptEnd.y;
+		iPoint_Bottom = ptStart.y;
+	}
+	else
+	{
+		iPoint_Top = ptStart.y;
+		iPoint_Bottom = ptEnd.y;
+	}
+
+	double rx = ((double)iPoint_Left / rect.right);
+	double rx2 = ((double)iPoint_Right / rect.right);
+
+	double ry = ((double)iPoint_Top / rect.bottom);
+	double ry2 = ((double)iPoint_Bottom / rect.bottom);
+
+	int iStartX = (int)(SrcImg.cols*rx);
+	int IStartY = (int)(SrcImg.rows*ry);
+
+	int iWidth = (int)(SrcImg.cols*rx2 - SrcImg.cols*rx);
+	int iHeight = (int)(SrcImg.rows*ry2 - SrcImg.rows*ry);
+
+	Rect ROI(iStartX, IStartY, iWidth, iHeight);
+	DstImg = SrcImg(ROI);
+}

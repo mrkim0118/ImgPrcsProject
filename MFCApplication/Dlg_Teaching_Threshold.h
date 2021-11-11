@@ -9,7 +9,7 @@ class CDlg_Teaching_Threshold : public CDialogEx , public CDlgItem
 {
 	DECLARE_DYNAMIC(CDlg_Teaching_Threshold)
 
-public:
+private:
 	CDlg_Teaching_Threshold(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~CDlg_Teaching_Threshold();
 
@@ -17,13 +17,14 @@ public:
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_DLG_THRESHOLD };
 #endif
-
+	
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
 
 private:
+	static CDlg_Teaching_Threshold* m_pDlgThreshold;
 	unique_ptr<COpenCV> m_pOpenCV;
 	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 	UINT m_iEdit_Adp_BlockSize;
@@ -40,6 +41,8 @@ private:
 	int m_iEdit_Threshold_Value;
 
 public:
+	static CDlg_Teaching_Threshold* GetInstance();
+	static void DestroyInstance();
 
 	virtual BOOL OnInitDialog();
 

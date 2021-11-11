@@ -10,6 +10,8 @@
 // CDlg_Teaching_Morphology 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(CDlg_Teaching_Morphology, CDialogEx)
+CDlg_Teaching_Morphology* CDlg_Teaching_Morphology::m_pDlgMorphology = NULL;
+
 
 CDlg_Teaching_Morphology::CDlg_Teaching_Morphology(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_DLG_MORPHOLOGY, pParent)
@@ -61,6 +63,23 @@ END_MESSAGE_MAP()
 
 // CDlg_Teaching_Morphology 메시지 처리기입니다.
 
+CDlg_Teaching_Morphology * CDlg_Teaching_Morphology::GetInstance()
+{
+	if (m_pDlgMorphology == NULL)
+	{
+		m_pDlgMorphology = new CDlg_Teaching_Morphology;
+	}
+	return m_pDlgMorphology;
+}
+
+void CDlg_Teaching_Morphology::DestroyInstance()
+{
+	if (m_pDlgMorphology != NULL)
+	{
+		delete m_pDlgMorphology;
+		m_pDlgMorphology = NULL;
+	}
+}
 
 BOOL CDlg_Teaching_Morphology::OnInitDialog()
 {

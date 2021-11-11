@@ -9,7 +9,7 @@ class CDlg_Teaching_Histogram : public CDialogEx , public CDlgItem
 {
 	DECLARE_DYNAMIC(CDlg_Teaching_Histogram)
 
-public:
+private:
 	CDlg_Teaching_Histogram(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~CDlg_Teaching_Histogram();
 
@@ -24,6 +24,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
+	static CDlg_Teaching_Histogram* m_pDlgHistogram;
+
 	unique_ptr<COpenCV> m_pOpenCV;
 	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 
@@ -41,6 +43,10 @@ private:
 
 
 public:
+
+	static CDlg_Teaching_Histogram* GetInstance();
+	static void DestroyInstance();
+
 	virtual BOOL OnInitDialog();
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnBnClickedChkEqualize();

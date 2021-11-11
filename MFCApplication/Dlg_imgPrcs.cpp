@@ -53,28 +53,29 @@ void CDlg_ImgPrcs::InitTeachingTab()
 
 	CRect rect;
 	m_Teaching_Tab.GetWindowRect(&rect);
-
-	m_pDlgThreshold = make_unique<CDlg_Teaching_Threshold>();
+	
+	//CDlg_Teaching_Threshold::GetInstance();
+	m_pDlgThreshold = CDlg_Teaching_Threshold::GetInstance();  
 	m_pDlgThreshold->Create(IDD_DLG_THRESHOLD, &m_Teaching_Tab);
 	m_pDlgThreshold->MoveWindow(0, 20, rect.Width(), rect.Height());
 	m_pDlgThreshold->ShowWindow(SW_HIDE);
 
-	m_pDlgMorphology = make_unique<CDlg_Teaching_Morphology>();
+	m_pDlgMorphology = CDlg_Teaching_Morphology::GetInstance(); 
 	m_pDlgMorphology->Create(IDD_DLG_MORPHOLOGY, &m_Teaching_Tab);
 	m_pDlgMorphology->MoveWindow(0, 20, rect.Width(), rect.Height());
 	m_pDlgMorphology->ShowWindow(SW_HIDE);
 
-	m_pDlgTemplateMatch = make_unique<CDlg_Teaching_Template_Match>();
+	m_pDlgTemplateMatch = CDlg_Teaching_Template_Match::GetInstance();
 	m_pDlgTemplateMatch->Create(IDD_DLG_TEMPLATE_MATCH, &m_Teaching_Tab);
 	m_pDlgTemplateMatch->MoveWindow(0, 20, rect.Width(), rect.Height());
 	m_pDlgTemplateMatch->ShowWindow(SW_HIDE);
 
-	m_pDlgHistogram = make_unique<CDlg_Teaching_Histogram>();
+	m_pDlgHistogram = CDlg_Teaching_Histogram::GetInstance();
 	m_pDlgHistogram->Create(IDD_DLG_HISTOGRAM, &m_Teaching_Tab);
 	m_pDlgHistogram->MoveWindow(0, 20, rect.Width(), rect.Height());
 	m_pDlgHistogram->ShowWindow(SW_HIDE);
 
-	m_pDlgBrightness = make_unique<CDlg_Teaching_Brightness>();
+	m_pDlgBrightness = CDlg_Teaching_Brightness::GetInstance();
 	m_pDlgBrightness->Create(IDD_DLG_BRIGHTNESS, &m_Teaching_Tab);
 	m_pDlgBrightness->MoveWindow(0, 20, rect.Width(), rect.Height());
 	m_pDlgBrightness->ShowWindow(SW_HIDE);
@@ -107,30 +108,17 @@ int CDlg_ImgPrcs::GetInspMode()
 	return m_iInspMode;
 }
 
-void CDlg_ImgPrcs::OnDrawROI(CDlgItem::ViewData& viewdata)
+void CDlg_ImgPrcs::OnDrawROI(CDlgItem::ViewData& viewdata , COLORREF pencolor)
 {
-	// Picture Control DC를 생성.
-	// IDC_PC_IMAGE는 Picture Control의 Resource ID.
-
-	// Picture Control 크기를 얻는다.
-	//CRect rect;
-	//GetDlgItem(IDC_STATIC_SRC_VIEW)->GetClientRect(&rect);
-
-	//CWnd* pWnd = NULL;
-	//pWnd = GetDlgItem(IDC_STATIC_SRC_VIEW);
-	//CDC *pDCc = pWnd->GetDC();
 
 	CDC memDC;
 	CBitmap *pOldBitmap, bitmap;
 	CPen *pOldPen = NULL;
 	CBrush *pOldBrush = NULL;
 	CPen pen;
-	if (m_iInspMode == CImgPrcs::_MODE_TEMPLATE_MATCH_)
-		pen.CreatePen(PS_SOLID, 2, COLOR_RED);
-	else
-		pen.CreatePen(PS_SOLID, 2, COLOR_YELLOW);
-
 	CBrush brush;
+
+	pen.CreatePen(PS_SOLID, 2, pencolor);
 	brush.CreateStockObject(NULL_BRUSH);
 
 	// Picture Control DC에 호환되는 새로운 CDC를 생성. (임시 버퍼)
@@ -460,7 +448,7 @@ void CDlg_ImgPrcs::OnBnClickedBtnSrcToTeachingDlg()
 		if (m_pDlgTemplateMatch != NULL)
 		{
 			Mat Src = m_ViewData_Src.img->clone();
-			m_pDlgTemplateMatch->CreateModelImg(Src, *m_pMessageImg, m_ptROI_Start, m_ptROI_End, m_ViewData_Src.rect);
+			m_pOpenCV->CreateROIImg(Src, *m_pMessageImg, m_ptROI_Start, m_ptROI_End, m_ViewData_Src.rect);
 			::SendMessage(m_pDlgTemplateMatch->GetSafeHwnd(), WM_TEMPLATE_MATCH_MODEL, NULL, (LPARAM)m_pMessageImg);
 		}
 		break;
@@ -563,16 +551,19 @@ void CDlg_ImgPrcs::OnLButtonUp(UINT nFlags, CPoint point)
 
 			m_bClicked = false;
 			m_ptROI_End = point;
-			OnDrawROI(m_ViewData_Src);
+
+			COLORREF pencolor = COLOR_YELLOW;
+			
+			if (m_iInspMode == CImgPrcs::_MODE_TEMPLATE_MATCH_)
+				pencolor = COLOR_RED;
+			
+			OnDrawROI(m_ViewData_Src , pencolor);
 		}
-
-
 }
 
 
 void CDlg_ImgPrcs::OnMouseMove(UINT nFlags, CPoint point)
 {
-
 	if (m_DlgRect_Src.PtInRect(point))
 	{
 		point.x = point.x - m_DlgRect_Src.left;
@@ -581,10 +572,15 @@ void CDlg_ImgPrcs::OnMouseMove(UINT nFlags, CPoint point)
 		if (m_bClicked == true)
 		{
 			m_ptROI_End = point;
-			OnDrawROI(m_ViewData_Src);
+
+			COLORREF pencolor = COLOR_YELLOW;
+
+			if (m_iInspMode == CImgPrcs::_MODE_TEMPLATE_MATCH_)
+				pencolor = COLOR_RED;
+			
+			OnDrawROI(m_ViewData_Src , pencolor);
 		}
 	}
-
 
 	CDialogEx::OnMouseMove(nFlags, point);
 }
@@ -594,8 +590,13 @@ void CDlg_ImgPrcs::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	ReleaseViewData();
+	m_pDlgThreshold->DestroyInstance();
+	m_pDlgBrightness->DestroyInstance();
+	m_pDlgHistogram->DestroyInstance();
+	m_pDlgMorphology->DestroyInstance();
+	m_pDlgTemplateMatch->DestroyInstance();
 
+	ReleaseViewData();
 }
 
 
@@ -628,8 +629,9 @@ void CDlg_ImgPrcs::OnRButtonDown(UINT nFlags, CPoint point)
 
 void CDlg_ImgPrcs::OnBnClickedBtnCropImg()
 {
-	cv::Rect rect(m_DlgRect_Src.left, m_DlgRect_Src.right, m_DlgRect_Src.Width(), m_DlgRect_Src.Height());
-	Mat temp = *m_ViewData_Src.img;
-	*m_ViewData_Src.img = temp(rect);
+	//CRect rect(m_ptROI_Start.x, m_ptROI_Start.y, m_ptROI_End.x - m_ptROI_Start.x, m_ptROI_End.y - m_ptROI_Start.y);
+	Mat temp = m_ViewData_Src.img->clone();
+
+	m_pOpenCV->CreateROIImg(temp, *m_ViewData_Src.img, m_ptROI_Start, m_ptROI_End, m_ViewData_Src.rect);
 	DrawViewData(m_ViewData_Src);
 }

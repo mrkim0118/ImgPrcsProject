@@ -11,6 +11,9 @@
 
 IMPLEMENT_DYNAMIC(CDlg_Teaching_Brightness, CDialogEx)
 
+
+CDlg_Teaching_Brightness* CDlg_Teaching_Brightness::m_pDlgBrightness = NULL;
+
 CDlg_Teaching_Brightness::CDlg_Teaching_Brightness(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_DLG_BRIGHTNESS, pParent)
 	, m_iEdit_Value_Brightness(0)
@@ -50,6 +53,24 @@ END_MESSAGE_MAP()
 
 
 // CDlg_Teaching_Brightness 메시지 처리기입니다.
+
+CDlg_Teaching_Brightness * CDlg_Teaching_Brightness::GetInstance()
+{
+	if (m_pDlgBrightness == NULL)
+	{
+		m_pDlgBrightness = new CDlg_Teaching_Brightness;
+	}
+	return m_pDlgBrightness;
+}
+
+void CDlg_Teaching_Brightness::DestroyInstance()
+{
+	if (m_pDlgBrightness != NULL)
+	{
+		delete m_pDlgBrightness;
+		m_pDlgBrightness = NULL;
+	}
+}
 
 
 void CDlg_Teaching_Brightness::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)

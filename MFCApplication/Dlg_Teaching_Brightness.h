@@ -8,7 +8,7 @@ class CDlg_Teaching_Brightness : public CDialogEx , public CDlgItem
 {
 	DECLARE_DYNAMIC(CDlg_Teaching_Brightness)
 
-public:
+private:
 	CDlg_Teaching_Brightness(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~CDlg_Teaching_Brightness();
 
@@ -23,6 +23,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
+	static CDlg_Teaching_Brightness* m_pDlgBrightness;
 	unique_ptr<COpenCV>m_pOpenCV;
 	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 
@@ -38,6 +39,10 @@ private:
 	CRect m_DlgRect_Dst;
 
 public:
+
+	static CDlg_Teaching_Brightness* GetInstance();
+	static void DestroyInstance();
+
 	void UpdateTestImg(CScrollBar* pScrollBar);
 	virtual BOOL OnInitDialog();
 

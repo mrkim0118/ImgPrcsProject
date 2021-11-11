@@ -10,3 +10,5 @@ CImgPrcs::CImgPrcs()
 CImgPrcs::~CImgPrcs()
 {
 }
+
+

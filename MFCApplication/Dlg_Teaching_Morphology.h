@@ -9,7 +9,7 @@ class CDlg_Teaching_Morphology : public CDialogEx , public CDlgItem
 {
 	DECLARE_DYNAMIC(CDlg_Teaching_Morphology)
 
-public:
+private:
 	CDlg_Teaching_Morphology(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~CDlg_Teaching_Morphology();
 
@@ -23,6 +23,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 private:
+
+	static CDlg_Teaching_Morphology* m_pDlgMorphology;
 	unique_ptr<COpenCV> m_pOpenCV;
 	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 
@@ -39,7 +41,9 @@ private:
 	int m_iEdit_Element_AnchorY;
 
 	UINT m_iEdit_Element_Size;
-
+public:
+	static CDlg_Teaching_Morphology* GetInstance();
+	static void DestroyInstance();
 public:
 
 	virtual BOOL OnInitDialog();

@@ -23,12 +23,17 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
+	static CDlg_Teaching_Template_Match* m_pDlgTemplateMatch;
 	Mat* m_pModelImg;
 	CComboBox m_Cmb_Method;
 	CRect m_DlgRect_Dst;
 	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 
 public:
+
+	static CDlg_Teaching_Template_Match* GetInstance();
+	static void DestroyInstance();
+
 	virtual BOOL OnInitDialog();
 
 	afx_msg void OnPaint();
@@ -38,8 +43,6 @@ public:
 
 	int GetTemplateMatchMethod();
 	Mat GetModelImg();
-
-	void CreateModelImg(Mat SrcImg , Mat& DstImg, CPoint ptStart , CPoint ptEnd , CRect rect);
 
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

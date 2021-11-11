@@ -9,6 +9,9 @@
 
 // CDlg_Teaching_Template_Match 대화 상자입니다.
 
+CDlg_Teaching_Template_Match* CDlg_Teaching_Template_Match::m_pDlgTemplateMatch = NULL;
+
+
 IMPLEMENT_DYNAMIC(CDlg_Teaching_Template_Match, CDialogEx)
 
 CDlg_Teaching_Template_Match::CDlg_Teaching_Template_Match(CWnd* pParent /*=NULL*/)
@@ -45,6 +48,23 @@ END_MESSAGE_MAP()
 
 // CDlg_Teaching_Template_Match 메시지 처리기입니다.
 
+CDlg_Teaching_Template_Match * CDlg_Teaching_Template_Match::GetInstance()
+{
+	if (m_pDlgTemplateMatch == NULL)
+	{
+		m_pDlgTemplateMatch = new CDlg_Teaching_Template_Match;
+	}
+	return m_pDlgTemplateMatch;
+}
+
+void CDlg_Teaching_Template_Match::DestroyInstance()
+{
+	if (m_pDlgTemplateMatch != NULL)
+	{
+		delete m_pDlgTemplateMatch;
+		m_pDlgTemplateMatch = NULL;
+	}
+}
 
 BOOL CDlg_Teaching_Template_Match::OnInitDialog()
 {
@@ -97,47 +117,7 @@ Mat CDlg_Teaching_Template_Match::GetModelImg()
 {
 	return *m_pModelImg;
 }
-void CDlg_Teaching_Template_Match::CreateModelImg(Mat SrcImg, Mat& DstImg, CPoint ptStart, CPoint ptEnd, CRect rect)
-{
-	int iPoint_Left, iPoint_Right, iPoint_Top, iPoint_Bottom;
 
-	if (ptStart.x > ptEnd.x)
-	{
-		iPoint_Left = ptEnd.x;
-		iPoint_Right = ptStart.x;
-	}
-	else
-	{
-		iPoint_Left = ptStart.x;
-		iPoint_Right = ptEnd.x;
-	}
-
-	if (ptStart.y > ptEnd.y)
-	{
-		iPoint_Top = ptEnd.y;
-		iPoint_Bottom = ptStart.y;
-	}
-	else
-	{
-		iPoint_Top = ptStart.y;
-		iPoint_Bottom = ptEnd.y;
-	}
-
-	double rx = ((double)iPoint_Left / rect.right);
-	double rx2 = ((double)iPoint_Right / rect.right);
-
-	double ry = ((double)iPoint_Top / rect.bottom);
-	double ry2 = ((double)iPoint_Bottom / rect.bottom);
-
-	int iStartX = (int)(SrcImg.cols*rx);
-	int IStartY = (int)(SrcImg.rows*ry);
-
-	int iWidth = (int)(SrcImg.cols*rx2 - SrcImg.cols*rx);
-	int iHeight = (int)(SrcImg.rows*ry2 - SrcImg.rows*ry);
-
-	Rect ROI(iStartX, IStartY, iWidth, iHeight);
-	DstImg = SrcImg(ROI);
-}
 LRESULT CDlg_Teaching_Template_Match::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
 	Mat* Tmp = (Mat*)lParam;

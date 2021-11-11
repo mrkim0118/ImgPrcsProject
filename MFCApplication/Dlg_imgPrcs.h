@@ -39,11 +39,12 @@ private:
 	//COpenCV *m_pOpenCV;
 	unique_ptr<COpenCV> m_pOpenCV;
 
-	unique_ptr<CDlg_Teaching_Threshold> m_pDlgThreshold;
-	unique_ptr<CDlg_Teaching_Morphology> m_pDlgMorphology;
-	unique_ptr<CDlg_Teaching_Template_Match> m_pDlgTemplateMatch;
-	unique_ptr<CDlg_Teaching_Histogram> m_pDlgHistogram;
-	unique_ptr<CDlg_Teaching_Brightness> m_pDlgBrightness;
+	//unique_ptr<CDlg_Teaching_Threshold> m_pDlgThreshold;
+	CDlg_Teaching_Threshold *m_pDlgThreshold;
+	CDlg_Teaching_Morphology *m_pDlgMorphology;
+	CDlg_Teaching_Template_Match *m_pDlgTemplateMatch;
+	CDlg_Teaching_Histogram *m_pDlgHistogram;
+	CDlg_Teaching_Brightness *m_pDlgBrightness;
 	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 	list<CString> m_ImgFileList;
 
@@ -62,9 +63,9 @@ public:
 
 	void HideAllTeachingDlg();
 	void InitTeachingTab();
-	void OnDrawROI(CDlgItem::ViewData& viewdata);
+	void OnDrawROI(CDlgItem::ViewData& viewdata , COLORREF pencolor);
 	int GetInspMode();
-
+	
 	afx_msg void OnBnClickedBtnLoadImg();
 	afx_msg void OnMenuImgPrcs();
 	afx_msg void OnBnClickedBtnSaveImg();

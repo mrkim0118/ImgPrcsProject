@@ -11,6 +11,8 @@
 
 IMPLEMENT_DYNAMIC(CDlg_Teaching_Histogram, CDialogEx)
 
+CDlg_Teaching_Histogram* CDlg_Teaching_Histogram::m_pDlgHistogram = NULL;
+
 CDlg_Teaching_Histogram::CDlg_Teaching_Histogram(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_DLG_HISTOGRAM, pParent)
 	, m_iEdit_Bin_Num(256)
@@ -24,6 +26,7 @@ CDlg_Teaching_Histogram::CDlg_Teaching_Histogram(CWnd* pParent /*=NULL*/)
 CDlg_Teaching_Histogram::~CDlg_Teaching_Histogram()
 {
 }
+
 
 void CDlg_Teaching_Histogram::DoDataExchange(CDataExchange* pDX)
 {
@@ -52,6 +55,23 @@ END_MESSAGE_MAP()
 
 
 // CDlg_Teaching_Histogram 메시지 처리기입니다.
+CDlg_Teaching_Histogram * CDlg_Teaching_Histogram::GetInstance()
+{
+	if (m_pDlgHistogram == NULL)
+	{
+		m_pDlgHistogram = new CDlg_Teaching_Histogram;
+	}
+	return m_pDlgHistogram;
+}
+
+void CDlg_Teaching_Histogram::DestroyInstance()
+{
+	if (m_pDlgHistogram != NULL)
+	{
+		delete m_pDlgHistogram;
+		m_pDlgHistogram = NULL;
+	}
+}
 
 
 void CDlg_Teaching_Histogram::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
