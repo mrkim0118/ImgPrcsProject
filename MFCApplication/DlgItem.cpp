@@ -109,31 +109,31 @@ void CDlgItem::CorrectBitMapWidth(Mat SrcImg , Mat& DstImg)
 
 void CDlgItem::InitViewData(CWnd* pWnd, CWnd* pWnd_Ext /*= NULL*/)
 {
-	this->m_ViewData_Src.BitMapInfo = NULL;
-	this->m_ViewData_Dst.BitMapInfo = NULL;
-	this->m_ViewData_Src.img = new Mat;
-	this->m_ViewData_Dst.img = new Mat;
-	this->m_ViewData_Src.ScreenImg = new Mat;
-	this->m_ViewData_Dst.ScreenImg = new Mat;
-	this->m_ViewData_Src.dc = new CClientDC(pWnd);
+	m_ViewData_Src.BitMapInfo = NULL;
+	m_ViewData_Dst.BitMapInfo = NULL;
+	m_ViewData_Src.img = new Mat;
+	m_ViewData_Dst.img = new Mat;
+	m_ViewData_Src.ScreenImg = new Mat;
+	m_ViewData_Dst.ScreenImg = new Mat;
+	m_ViewData_Src.dc = new CClientDC(pWnd);
 
-	this->m_pMessageImg = new Mat;
+	m_pMessageImg = new Mat;
 
-	pWnd->GetClientRect(&this->m_ViewData_Src.rect);
+	pWnd->GetClientRect(&m_ViewData_Src.rect);
 
 	if (pWnd_Ext == NULL)
 	{
-		this->m_ViewData_Dst.dc = new CClientDC(pWnd);
-		pWnd->GetClientRect(&this->m_ViewData_Dst.rect);
+		m_ViewData_Dst.dc = new CClientDC(pWnd);
+		pWnd->GetClientRect(&m_ViewData_Dst.rect);
 	}
 	else
 	{
-		this->m_ViewData_Dst.dc = new CClientDC(pWnd_Ext);
-		pWnd_Ext->GetClientRect(&this->m_ViewData_Dst.rect);
+		m_ViewData_Dst.dc = new CClientDC(pWnd_Ext);
+		pWnd_Ext->GetClientRect(&m_ViewData_Dst.rect);
 	}
 
-	this->CreateBitMapInfo(this->m_ViewData_Dst);
-	this->CreateBitMapInfo(this->m_ViewData_Src);
+	CreateBitMapInfo(m_ViewData_Dst);
+	CreateBitMapInfo(m_ViewData_Src);
 }
 
 void CDlgItem::ReleaseViewData()
@@ -155,11 +155,11 @@ void CDlgItem::ReleaseViewData()
 		delete m_ViewData_Dst.img;
 		m_ViewData_Dst.img = NULL;
 	}
-	//if (m_pMessageImg != NULL)
-	//{
-	//	delete m_pMessageImg;
-	//	m_pMessageImg = NULL;
-	//}
+	if (m_pMessageImg != NULL)
+	{
+		delete m_pMessageImg;
+		m_pMessageImg = NULL;
+	}
 }
 
 void CDlgItem::DrawViewData(ViewData & View)

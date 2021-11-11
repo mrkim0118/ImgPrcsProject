@@ -124,10 +124,14 @@ void CDlg_ImgPrcs::OnDrawROI(CDlgItem::ViewData& viewdata)
 	CBitmap *pOldBitmap, bitmap;
 	CPen *pOldPen = NULL;
 	CBrush *pOldBrush = NULL;
+	CPen pen;
+	if (m_iInspMode == CImgPrcs::_MODE_TEMPLATE_MATCH_)
+		pen.CreatePen(PS_SOLID, 2, COLOR_RED);
+	else
+		pen.CreatePen(PS_SOLID, 2, COLOR_YELLOW);
 
-	CPen penRed(PS_SOLID, 2, RGB(255, 0, 0));
-	CBrush brushRed;
-	brushRed.CreateStockObject(NULL_BRUSH);
+	CBrush brush;
+	brush.CreateStockObject(NULL_BRUSH);
 
 	// Picture Control DC에 호환되는 새로운 CDC를 생성. (임시 버퍼)
 	memDC.CreateCompatibleDC(viewdata.dc);
@@ -139,12 +143,11 @@ void CDlg_ImgPrcs::OnDrawROI(CDlgItem::ViewData& viewdata)
 	SetStretchBltMode(memDC.GetSafeHdc(), COLORONCOLOR);
 	StretchDIBits(memDC.GetSafeHdc(), 0, 0, viewdata.rect.Width(), viewdata.rect.Height(), 0, 0, viewdata.ScreenImg->cols, viewdata.ScreenImg->rows, viewdata.ScreenImg->data, viewdata.BitMapInfo, DIB_RGB_COLORS, SRCCOPY);
 
-	pOldPen = memDC.SelectObject(&penRed);
-	pOldBrush = memDC.SelectObject(&brushRed);
+	pOldPen = memDC.SelectObject(&pen);
+	pOldBrush = memDC.SelectObject(&brush);
 
-	//memDC.Rectangle(m_ptROI_Start.x-30 , m_ptROI_Start.y-40 , m_ptROI_End.x-30 , m_ptROI_End.y-40);
 	memDC.Rectangle(m_ptROI_Start.x, m_ptROI_Start.y, m_ptROI_End.x, m_ptROI_End.y);
-	//memDC.Rectangle(CRect(m_ptROI_Start , m_ptROI_End));
+	
 	memDC.SelectObject(pOldPen);
 	memDC.SelectObject(pOldBrush);
 
@@ -182,6 +185,7 @@ BEGIN_MESSAGE_MAP(CDlg_ImgPrcs, CDialogEx)
 	ON_WM_RBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_BTN_CROP_IMG, &CDlg_ImgPrcs::OnBnClickedBtnCropImg)
 END_MESSAGE_MAP()
 
 
@@ -537,8 +541,6 @@ void CDlg_ImgPrcs::OnCbnSelchangeCmbMode()
 void CDlg_ImgPrcs::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	m_iInspMode = GetInspMode();
-	if (m_iInspMode == CImgPrcs::_MODE_TEMPLATE_MATCH_)
-	{
 		if(m_DlgRect_Src.PtInRect(point))
 		{
 			point.x = point.x - m_DlgRect_Src.left;
@@ -547,14 +549,13 @@ void CDlg_ImgPrcs::OnLButtonDown(UINT nFlags, CPoint point)
 			m_ptROI_Start = point;
 			m_bClicked = true;
 		}
-	}
+	
 }
 
 
 void CDlg_ImgPrcs::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	if (m_iInspMode == CImgPrcs::_MODE_TEMPLATE_MATCH_)
-	{
+
 		if (m_DlgRect_Src.PtInRect(point))
 		{
 			point.x = point.x - m_DlgRect_Src.left;
@@ -564,7 +565,7 @@ void CDlg_ImgPrcs::OnLButtonUp(UINT nFlags, CPoint point)
 			m_ptROI_End = point;
 			OnDrawROI(m_ViewData_Src);
 		}
-	}
+
 
 }
 
@@ -622,4 +623,13 @@ void CDlg_ImgPrcs::OnRButtonDown(UINT nFlags, CPoint point)
 	m_pDlgExpansionView->ShowWindow(SW_SHOW);
 
 	__super::OnRButtonDown(nFlags, point);
+}
+
+
+void CDlg_ImgPrcs::OnBnClickedBtnCropImg()
+{
+	cv::Rect rect(m_DlgRect_Src.left, m_DlgRect_Src.right, m_DlgRect_Src.Width(), m_DlgRect_Src.Height());
+	Mat temp = *m_ViewData_Src.img;
+	*m_ViewData_Src.img = temp(rect);
+	DrawViewData(m_ViewData_Src);
 }

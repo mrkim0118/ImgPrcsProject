@@ -36,7 +36,8 @@ END_MESSAGE_MAP()
 LRESULT CDlg_Expansion_View::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
 
-	m_ViewData_Src.img = (Mat*)lParam;
+	Mat* Tmp = (Mat*)lParam;
+	*m_ViewData_Src.img = Tmp->clone();
 	DrawViewData(m_ViewData_Src);
 
 	return 0;
@@ -70,8 +71,7 @@ void CDlg_Expansion_View::OnPaint()
 
 void CDlg_Expansion_View::RefreshView(Mat img)
 {
-	m_ViewData_Src.img = &img;
+	Mat *Tmp = &img.clone();
+	*m_ViewData_Src.img = Tmp->clone();
 	DrawViewData(m_ViewData_Src);
-
-
 }

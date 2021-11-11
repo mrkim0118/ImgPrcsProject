@@ -140,8 +140,9 @@ void CDlg_Teaching_Template_Match::CreateModelImg(Mat SrcImg, Mat& DstImg, CPoin
 }
 LRESULT CDlg_Teaching_Template_Match::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
-	m_ViewData_Src.img = (Mat*)lParam;
-	*m_ViewData_Dst.img = m_ViewData_Src.img->clone();
+	Mat* Tmp = (Mat*)lParam;
+	*m_ViewData_Src.img = Tmp->clone();
+	*m_ViewData_Dst.img = Tmp->clone();
 	DrawViewData(m_ViewData_Src);
 	*m_pModelImg = m_ViewData_Src.img->clone();
 
@@ -150,7 +151,8 @@ LRESULT CDlg_Teaching_Template_Match::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 
 LRESULT CDlg_Teaching_Template_Match::OnReceiveNorm(WPARAM wParam, LPARAM lParam)
 {
-	m_ViewData_Dst.img = (Mat*)lParam;
+	Mat* Tmp = (Mat*)lParam;
+	*m_ViewData_Dst.img = Tmp->clone();
 	DrawViewData(m_ViewData_Dst);
 	return 0;
 }

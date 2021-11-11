@@ -80,4 +80,5 @@ public:
 	afx_msg void OnDestroy();
 	afx_msg void OnBnClickedBtnCvtGray();
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnBnClickedBtnCropImg();
 };

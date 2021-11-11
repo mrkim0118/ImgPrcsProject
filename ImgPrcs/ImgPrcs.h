@@ -10,7 +10,7 @@ public:
 
 #define COLOR_WHITE RGB(255,255,255)
 #define COLOR_BLACK RGB(0,0,0)
-#define COLOR_YELLOW RGB(0,255,255)
+#define COLOR_YELLOW RGB(255,255,0)
 #define COLOR_RED RGB(255,0,0)
 
 	enum ImgPrcsMode

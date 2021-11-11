@@ -217,8 +217,9 @@ void CDlg_Teaching_Threshold::OnEnChangeEditThreshold()
 
 LRESULT CDlg_Teaching_Threshold::OnReceiveImg(WPARAM wParam, LPARAM lParam)
 {
-	m_ViewData_Src.img = (Mat*)lParam;
-	*m_ViewData_Dst.img = m_ViewData_Src.img->clone();
+	Mat* Tmp = (Mat*)lParam;
+	*m_ViewData_Src.img = Tmp->clone();
+	*m_ViewData_Dst.img = Tmp->clone();
 	DrawViewData(m_ViewData_Src);
 
 	return 0;
