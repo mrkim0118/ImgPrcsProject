@@ -31,24 +31,25 @@ void CDlg_Teaching_Threshold::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_CMB_ADAPTIVE_METHOD, m_Cmb_Adp_Method);
 	DDX_Control(pDX, IDC_CMB_ADAPTIVE_TYPE, m_Cmb_Adp_Type);
-	DDX_Text(pDX, IDC_EDIT_ADAPTIVE_BLOCK_SIZE, m_iEdit_Adp_BlockSize);
-	DDX_Text(pDX, IDC_EDIT_ADAPTIVE_C, m_iEdit_Adp_C);
-	DDX_Control(pDX, IDC_CMB_METHOD, m_Cmb_Method);
-	DDX_Text(pDX, IDC_EDIT_THRESHOLD, m_iEdit_Threshold);
 	DDX_Control(pDX, IDC_CHECK1, m_Chk_Adaptive_Use);
 	DDX_Control(pDX, IDC_SLIDER_THRESHOLD, m_Slider_Threshold);
+	DDX_Control(pDX, IDC_CMB_METHOD, m_Cmb_Method);
+
+	DDX_Text(pDX, IDC_EDIT_ADAPTIVE_BLOCK_SIZE, m_iEdit_Adp_BlockSize);
+	DDX_Text(pDX, IDC_EDIT_ADAPTIVE_C, m_iEdit_Adp_C);
+	DDX_Text(pDX, IDC_EDIT_THRESHOLD, m_iEdit_Threshold);
 	DDX_Text(pDX, IDC_EDIT_THRESHOLD_VAL, m_iEdit_Threshold_Value);
 }
 
 
 BEGIN_MESSAGE_MAP(CDlg_Teaching_Threshold, CDialogEx)
+	ON_MESSAGE(WM_THRESHOLD_TEST, OnReceiveImg)
 	ON_EN_CHANGE(IDC_EDIT_ADAPTIVE_BLOCK_SIZE, &CDlg_Teaching_Threshold::OnEnChangeEditAdaptiveBlockSize)
 	ON_EN_CHANGE(IDC_EDIT_ADAPTIVE_C, &CDlg_Teaching_Threshold::OnEnChangeEditAdaptiveC)
 	ON_EN_CHANGE(IDC_EDIT_THRESHOLD, &CDlg_Teaching_Threshold::OnEnChangeEditThreshold)
-
-	ON_MESSAGE(WM_THRESHOLD_TEST, OnReceiveImg)
-	ON_WM_HSCROLL()
 	ON_EN_CHANGE(IDC_EDIT_THRESHOLD_VAL, &CDlg_Teaching_Threshold::OnEnChangeEditThresholdVal)
+
+	ON_WM_HSCROLL()
 	ON_WM_PAINT()
 	ON_WM_DESTROY()
 	ON_WM_RBUTTONDBLCLK()

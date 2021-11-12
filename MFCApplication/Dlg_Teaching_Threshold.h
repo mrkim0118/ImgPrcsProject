@@ -25,6 +25,7 @@ protected:
 
 private:
 	static CDlg_Teaching_Threshold* m_pDlgThreshold;
+
 	unique_ptr<COpenCV> m_pOpenCV;
 	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
 	UINT m_iEdit_Adp_BlockSize;
@@ -36,7 +37,6 @@ private:
 	CComboBox m_Cmb_Method;
 	CButton m_Chk_Adaptive_Use;
 	CSliderCtrl m_Slider_Threshold;
-
 	CRect m_DlgRect_Dst;
 	int m_iEdit_Threshold_Value;
 
@@ -53,6 +53,7 @@ public:
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnEnChangeEditThresholdVal();
 	afx_msg void OnPaint();
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg LRESULT OnReceiveImg(WPARAM wParam , LPARAM lParam);
 
 	int GetThreshold();
@@ -64,5 +65,4 @@ public:
 	int GetAdaptiveUse();
 
 	void UpdateTestImg();
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

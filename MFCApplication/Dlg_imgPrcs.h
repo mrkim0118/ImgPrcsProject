@@ -46,6 +46,7 @@ private:
 	CDlg_Teaching_Histogram *m_pDlgHistogram;
 	CDlg_Teaching_Brightness *m_pDlgBrightness;
 	unique_ptr<CDlg_Expansion_View> m_pDlgExpansionView;
+
 	list<CString> m_ImgFileList;
 
 	CComboBox m_Cmb_Mode;
